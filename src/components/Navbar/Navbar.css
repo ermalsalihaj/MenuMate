@@ -1,3 +1,6 @@
+*{
+    scroll-behavior: smooth;
+}
 .app__navbar{
     width: 100%;
     display: flex;
@@ -23,13 +26,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
+    color: white;
     list-style: none;
 }
 
 .app__navbar-links li{
     margin: 0 1rem;
     cursor: pointer;
+    
+}
+.app__navbar-links li a{
+    color: white;
 }
 .app__navbar-links li:hover{
     color: var(--color-grey);
@@ -47,6 +54,7 @@
     margin:  0 1rem;
     text-decoration: none;
     transition: 0.5s ease;
+    
 }
 .app__navbar-login a:hover{
     border-bottom: 1px solid var(--color-golden);
