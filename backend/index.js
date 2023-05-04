@@ -25,17 +25,27 @@ con.connect((err) => {
 con.on("error", (err) => {
   console.error("Database error:", err);
 });
+app.get("/users", (req, res) => {
+  con.query("SELECT * FROM users", (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send({ message: "An error occurred." });
+    } else {
+      res.send(result);
+    }
+  });
+});
 
-// Endpoint for updating a user
+
 app.put("/update", (req, res) => {
-  const id = req.body.id;
+  const id = req.query.id;
   const email = req.body.email;
   const username = req.body.username;
-  const password = req.body.password;
+ 
 
   con.query(
-    "UPDATE users SET email = ?, username = ?, password = ? WHERE id = ?",
-    [email, username, password, id],
+    "UPDATE users SET email = ?, username = ? WHERE id = ?",
+    [email, username, id],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -51,9 +61,8 @@ app.put("/update", (req, res) => {
   );
 });
 
-// Endpoint for deleting a user
-app.delete("/delete", (req, res) => {
-  const id = req.body.id;
+app.delete("/delete/:id", (req, res) => {
+  const id = req.params.id;
 
   con.query("DELETE FROM users WHERE id = ?", [id], (err, result) => {
     if (err) {
