@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {GiHamburgerMenu} from 'react-icons/gi';
+import { Link } from "react-router-dom";
 import {MdOutlineRestaurantMenu} from 'react-icons/md';
 
 import images from '../../constants/images';
@@ -27,7 +28,9 @@ const Navbar = () => {
     </ul>
 
     <div className='app__navbar-login'>
-    <a href="#login" className='p__opensans'> Log In / Register</a>
+    <li>
+        <Link to="/login" className='p__opensans'>Log In / Register</Link>
+      </li>
         <div></div>
         <a href="/" className='p__opensans'>Book Table</a>
     </div>

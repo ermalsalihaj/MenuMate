@@ -1,68 +1,90 @@
-
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f5f5f5;
-  }
-  
-  .registerForm,
-  .loginForm {
-    width: 400px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  h4 {
-    margin-top: 0;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  .textInput {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    border: none;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    background-color: #2c53d4;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  a {
-    color: #3c63e3;
-  }
-  
-  .statusMessage {
-    margin-top: 10px;
-    font-size: 14px;
-    color: red;
-    text-align: center;
-  }
-  
-  
-  
-  @media screen and (max-width: 600px) {
-    .registerForm,
-    .loginForm {
-      width: 80%;
-    }
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #595750;
+}
+
+.registerForm,
+.loginForm {
+  width: 400px;
+  background-color: transparent;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid white;
+}
+
+h4 {
+  margin-top: 0;
+  font-size: 24px;
+  color: #f2f2f9;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #efeff1;
+  text-align: center;
+}
+
+.textInput {
+  text-align: center;
+  width: 100%;
+  height: 30px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  color: #2c53d4;
+}
+p{
+ color:white; 
+}
+.button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 20px;
+  background-color: #2c53d4;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.button:hover {
+  background-color: #1c386d;
+}
+
+a {
+  color: #2c53d4;
+  font-size: 14px;
+  text-decoration: none;
+  margin-top: 20px;
+  transition: color 0.3s ease-in-out;
+}
+
+a:hover {
+  color: #1c386d;
+}
+
+.statusMessage {
+  margin-top: 20px;
+  font-size: 16px;
+  color: red;
+  text-align: center;
+}

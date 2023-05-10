@@ -1,26 +1,45 @@
-import React from 'react';
-
-import { AboutUs, Chef, FindUs, Footer, Gallery,Login, Header, Intro, Laurels, SpecialMenu,Admin, } from './container';
-import { Navbar } from './components';
-import './App.css';
-
-
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  AboutUs,
+  Chef,
+  FindUs,
+  Footer,
+  Gallery,
+  Login,
+  Header,
+  Intro,
+  Laurels,
+  SpecialMenu,
+  Admin,
+} from "./container";
+import { Navbar } from "./components";
+import "./App.css";
 
 const App = () => (
-<div>
+  <Router>
+    <Routes>
+    <Route path="/" element={
+  <React.Fragment>
     <Navbar />
     <Header />
     <AboutUs />
     <SpecialMenu />
-    <Login />
-    <Admin/>
-    {/*<Chef />
-    <Intro />
+    <Chef />
+    {/* <Intro />
     <Laurels />
     <Gallery />
     <FindUs />
-    <Footer /> */}
-  </div>
+    <Footer />  */}
+    
+  </React.Fragment>
+} />
+  <Route path="/login" element={<Login />}/>
+  
+
+
+    </Routes>
+  </Router>
 );
 
 export default App;

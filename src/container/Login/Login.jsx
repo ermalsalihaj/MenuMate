@@ -1,6 +1,8 @@
 import "./Login.css";
 import Axios from "axios";
 import React, { useState } from "react";
+import { SubHeading } from '../../components';
+import { images } from '../../constants';
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -43,12 +45,13 @@ function Login() {
   };
 
   return (
-    <div className="container" id="login" style={{ backgroundColor: "#353535" }}>
+    <div className="container app__bg " id="login" >
+      
       {showRegisterForm ? (
         <div className="registerForm">
           <form action="">
             <h4>Register Here</h4>
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">Email: </label>
             <input
               className="textInput"
               type="email"
@@ -59,7 +62,7 @@ function Login() {
               placeholder="Enter email"
               required
             />
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">Username: </label>
             <input
               className="textInput"
               type="text"
@@ -70,7 +73,7 @@ function Login() {
               placeholder="Enter username"
               required
             />
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Password: </label>
             <input
               className="textInput"
               type="password"
@@ -91,7 +94,7 @@ function Login() {
               Already have an account?{" "}
               <b>
                 <a
-                  href="#login"
+                  href="#"
                   style={{ textDecoration: "none" }}
                   onClick={toggleRegisterForm}
                 >
@@ -106,7 +109,7 @@ function Login() {
         <div className="loginForm">
           <form action="">
             <h4>Login Here</h4>
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">Username: </label>
             <input
               className="textInput"
               type="text"
@@ -117,7 +120,7 @@ function Login() {
               placeholder="Enter username"
               required
             />
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Password: </label>
             <input
               className="textInput"
               type="password"
@@ -138,8 +141,8 @@ function Login() {
               Don't have an account?{" "}
               <b>
                 <a
-                  href="#login"
-                  style={{ textDecoration: "underline" }}
+                  href="#"
+                  
                   onClick={toggleRegisterForm}
                 >
                   Register here
