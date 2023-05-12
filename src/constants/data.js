@@ -55,8 +55,7 @@ const cocktails = [
     tags: 'Gin | Sweet Vermouth | Campari | Orange garnish',
   },
 ];
-
-const awards = [
+const awards = [ 
   {
     imgUrl: images.award02,
     title: 'Bib Gourmond',

@@ -26,11 +26,11 @@ const App = () => (
     <AboutUs />
     <SpecialMenu />
     <Chef />
-    {/* <Intro />
+    {/* <Intro /> */}
     <Laurels />
-    <Gallery />
-    <FindUs />
-    <Footer />  */}
+    {/* <Gallery /> */}
+    {/* <FindUs /> */}
+    {/* <Footer />  */}
     
   </React.Fragment>
 } />
