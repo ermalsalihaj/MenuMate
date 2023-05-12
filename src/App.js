@@ -19,25 +19,24 @@ import "./App.css";
 const App = () => (
   <Router>
     <Routes>
-    <Route path="/" element={
-  <React.Fragment>
-    <Navbar />
-    <Header />
-    <AboutUs />
-    <SpecialMenu />
-    <Chef />
-    {/* <Intro /> */}
-    <Laurels />
-    <Gallery />
-    {/* <FindUs /> */}
-    {/* <Footer />  */}
-    
-  </React.Fragment>
-} />
-  <Route path="/login" element={<Login />}/>
-  
-
-
+      <Route
+        path="/"
+        element={
+          <React.Fragment>
+            <Navbar />
+            <Header />
+            <AboutUs />
+            <SpecialMenu />
+            <Chef />
+            {/* <Intro /> */}
+            <Laurels />
+            <Gallery />
+            <FindUs />
+            {/* <Footer />  */}
+          </React.Fragment>
+        }
+      />
+      <Route path="/login" element={<Login />} />
     </Routes>
   </Router>
 );
