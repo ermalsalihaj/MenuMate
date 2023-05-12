@@ -28,7 +28,7 @@ const App = () => (
     <Chef />
     {/* <Intro /> */}
     <Laurels />
-    {/* <Gallery /> */}
+    <Gallery />
     {/* <FindUs /> */}
     {/* <Footer />  */}
     
