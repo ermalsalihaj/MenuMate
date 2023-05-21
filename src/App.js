@@ -8,10 +8,11 @@ import {
   Gallery,
   Login,
   Header,
-  Intro,
   Laurels,
   SpecialMenu,
   Admin,
+  BookTable,
+  Confirmation,
 } from "./container";
 import { Navbar } from "./components";
 import "./App.css";
@@ -28,7 +29,6 @@ const App = () => (
             <AboutUs />
             <SpecialMenu />
             <Chef />
-            {/* <Intro /> */}
             <Laurels />
             <Gallery />
             <FindUs />
@@ -37,8 +37,18 @@ const App = () => (
         }
       />
       <Route path="/login" element={<Login />} />
+      <Route path="/booktable" element={<BookTable />} />
+      <Route path="/confirmation" element={<Confirmation />} />
     </Routes>
   </Router>
 );
 
+
+
+
 export default App;
+
+
+
+
+

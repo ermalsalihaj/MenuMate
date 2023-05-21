@@ -1,0 +1,25 @@
+.confirmation-container {
+    font-family: "Roboto", sans-serif;
+    width: 20%;
+    margin: 0 auto;
+  }
+  .confirmation-input {
+    margin-bottom: 10px;
+    color: black;
+  }
+  .confirmation-btn {
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+  }
+
+  .error-message {
+    color: red;
+    font-family: "Roboto";
+    margin-top: 5px;
+    font-size: 14px;
+    background: none;
+  }
+  
+  

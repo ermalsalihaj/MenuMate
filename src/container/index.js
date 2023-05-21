@@ -4,11 +4,15 @@ import FindUs from './Findus/FindUs';
 import Footer from './Footer/Footer';
 import Gallery from './Gallery/Gallery';
 import Header from './Header/Header';
-import Intro from './Intro/Intro';
 import Laurels from './Laurels/Laurels';
 import SpecialMenu from './Menu/SpecialMenu';
 import Login from './Login/Login';
 import Admin from './Admin/Admin';
+import BookTable from './BookTable/BookTable';
+import Confirmation from './BookTable/Confirmation'
+
+import "bootstrap/dist/css/bootstrap.min.css";
+
 
 export {
   AboutUs,
@@ -17,9 +21,14 @@ export {
   Footer,
   Gallery,
   Header,
-  Intro,
   Laurels,
   Login,
   SpecialMenu,
+  BookTable,
+  Confirmation,
   Admin,
 };
+
+
+
+
