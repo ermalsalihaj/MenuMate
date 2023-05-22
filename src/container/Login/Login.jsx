@@ -3,6 +3,8 @@ import Axios from "axios";
 import React, { useState } from "react";
 import { SubHeading } from '../../components';
 import { images } from '../../constants';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -27,6 +29,9 @@ function Login() {
     });
   };
 
+  const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
+
   const login = (e) => {
     e.preventDefault();
     Axios.post("http://localhost:3001/login", {
@@ -37,6 +42,7 @@ function Login() {
         setLoginStatus(response.data.message);
       } else {
         setLoginStatus("Login was successful");
+        navigate("/");
       }
     });
   };

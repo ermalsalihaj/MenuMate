@@ -4,12 +4,15 @@
   "description": "restaurant management system",
   "main": "index.js",
   "scripts": {
-    "nodemon": "nodemon index.js"
+    "nodemon": "nodemon index.js",
+    "start": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cookie-parser": "^1.4.6",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.22"
   }

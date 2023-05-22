@@ -1,14 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
-
-import images from "../../constants/images";
+import axios from "axios";
 
 import "./Navbar.css";
+import images from "../../constants/images";
 
 const Navbar = () => {
+
+  const [auth,setAuth] = useState(false);
+  const [name,setName] = useState('');
   const [toggleMenu, setToggleMenu] = useState(false);
+
+  useEffect(() => {
+    const verify = async () => {
+      try {
+        const res = await axios.get("http://localhost:3001/", {
+          withCredentials: true, 
+        });
+        setAuth(true);
+        setName(res.data.name);
+      } catch (err) {
+        setAuth(false);
+      }
+    };
+    verify();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://localhost:3001/logout", null, {
+        withCredentials: true,
+      });
+      setAuth(false);
+      setName('');
+    } catch (err) {
+      console.log(err.response.data);
+    }
+  };
+
   return (
     <nav className="app__navbar">
       <div className="app__navbar-logo">
@@ -39,11 +70,19 @@ const Navbar = () => {
       </ul>
 
       <div className="app__navbar-login">
+        {
+          auth?
+        <a href=" " onClick={handleLogout} className='p__opensans'>
+           Logout
+        </a>
+        :
         <li>
           <Link to="/login" className="p__opensans">
             Log In / Register
           </Link>
         </li>
+        }
+
         <div></div>
         <li>
           <Link to="/booktable" className="p__opensans">
