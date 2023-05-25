@@ -33,12 +33,15 @@ const App = () => (
             <Gallery />
             <FindUs />
             <Footer />
+            <Admin/>
           </React.Fragment>
         }
       />
       <Route path="/login" element={<Login />} />
       <Route path="/booktable" element={<BookTable />} />
       <Route path="/confirmation" element={<Confirmation />} />
+      <Route path="/admin" element={<Admin />} />
+
     </Routes>
   </Router>
 );

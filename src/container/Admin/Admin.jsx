@@ -64,6 +64,7 @@ const Admin = () => {
             <th>ID</th>
             <th>Email</th>
             <th>Username</th>
+            <th>Role</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -94,8 +95,7 @@ const Admin = () => {
                     setEditedUser({ ...editedUser, username: e.target.value })
                   }
                 />
-              </td>
-              
+              </td><td>{user.role}</td>
               <td>
                 {editedUser.id === user.id ? (
                   <>

@@ -13,7 +13,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// to send any json object
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -123,7 +122,10 @@ app.post("/login", (req, res) => {
         res.status(500).send({ message: "An error occurred." });
       } else {
         if (result.length > 0) {
-          const token = jwt.sign({ idusers: result[0].idusers }, "jwtkey");
+          const token = jwt.sign(
+            { idusers: result[0].idusers, role: result[0].role },
+            "jwtkey"
+          );
           const { password, ...others } = result[0];
 
           res
@@ -132,7 +134,6 @@ app.post("/login", (req, res) => {
             })
             .status(200)
             .json(others);
-          // res.send(result);
         } else {
           res.send({ message: "Wrong username or password." });
         }
@@ -154,19 +155,24 @@ const verifyUser = (req, res, next) => {
     jwt.verify(token, "jwtkey", (err, decoded) => {
       if (err) {
         return res.status(401).json("Authentication Error");
-        // return res.json({Message: "Authentication Error"})
       } else {
         req.username = decoded.username;
+        req.role = decoded.role;
         next();
       }
     });
   }
 };
-
+app.get("/admin", verifyUser, (req, res) => {
+  if (req.role === "admin") {
+    res.redirect("/admin");
+  } else {
+    res.status(403).json({ message: "Access denied. Admin role required." });
+  }
+});
 app.get("/", verifyUser, (req, res) => {
   return res.json({ username: req.username });
 });
-
 app.listen(3001, () => {
   console.log("Running on port 3001...");
 });

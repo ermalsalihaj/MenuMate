@@ -8,16 +8,18 @@ import "./Navbar.css";
 import images from "../../constants/images";
 
 const Navbar = () => {
-
-  const [auth,setAuth] = useState(false);
-  const [name,setName] = useState('');
+  const [auth, setAuth] = useState(false);
+  const [name, setName] = useState("");
   const [toggleMenu, setToggleMenu] = useState(false);
+  const [role, setRole] = useState("");
+  const allowedRoles = ["admin", "user"];
+  const userRole = "admin";
 
   useEffect(() => {
     const verify = async () => {
       try {
         const res = await axios.get("http://localhost:3001/", {
-          withCredentials: true, 
+          withCredentials: true,
         });
         setAuth(true);
         setName(res.data.name);
@@ -34,7 +36,31 @@ const Navbar = () => {
         withCredentials: true,
       });
       setAuth(false);
-      setName('');
+      setName("");
+    } catch (err) {
+      console.log(err.response.data);
+    }
+  };
+  const handleAdmin = async () => {
+    try {
+      await axios.post("http://localhost:3001/login", null, {
+        withCredentials: true,
+      });
+      setAuth(true);
+      setRole("admin");
+      setName("");
+    } catch (err) {
+      console.log(err.response.data);
+    }
+  };
+  const handleUser = async () => {
+    try {
+      await axios.post("http://localhost:3001/login", null, {
+        withCredentials: true,
+      });
+      setAuth(true);
+      setRole("user");
+      setName("");
     } catch (err) {
       console.log(err.response.data);
     }
@@ -67,27 +93,34 @@ const Navbar = () => {
           {" "}
           <a href="#contact">Contact</a>
         </li>
+        {auth &&  (
+          <li>
+            <Link to="/admin" onClick={handleAdmin} className="p__opensans">
+              Dashboard
+            </Link>
+          </li>
+        )}
       </ul>
 
       <div className="app__navbar-login">
-        {
-          auth?
-        <a href=" " onClick={handleLogout} className='p__opensans'>
-           Logout
-        </a>
-        :
-        <li>
-          <Link to="/login" className="p__opensans">
-            Log In / Register
-          </Link>
-        </li>
-        }
+        {auth ? (
+          <a href=" " onClick={handleLogout} className="p__opensans">
+            Logout
+          </a>
+        ) : (
+          <li>
+            <Link to="/login" className="p__opensans">
+              Log In / Register
+            </Link>
+          </li>
+        )}
 
-        <div></div>
         <li>
-          <Link to="/booktable" className="p__opensans">
-            Book Table
-          </Link>
+          {auth &&  (
+            <Link to="/booktable" onClick={handleUser} className="p__opensans">
+              Book Table
+            </Link>
+          )}
         </li>
       </div>
 

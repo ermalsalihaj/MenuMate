@@ -11,7 +11,7 @@ import Admin from './Admin/Admin';
 import BookTable from './BookTable/BookTable';
 import Confirmation from './BookTable/Confirmation'
 
-import "bootstrap/dist/css/bootstrap.min.css";
+
 
 
 export {
