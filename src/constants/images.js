@@ -20,10 +20,35 @@ import award05 from '../assets/award05.png';
 import sign from '../assets/sign.png';
 import quote from '../assets/quote.png';
 import gericht from '../assets/gericht.png';
+import a from '../assets/a.png';
+import bt from '../assets/bt.png';
+import dd from '../assets/dd.png';
+import e from '../assets/e.png';
+import f from '../assets/f.png';
+import gg from '../assets/gg.png';
+import it4 from '../assets/it4.png';
+import it5 from '../assets/it5.png';
+import it6 from '../assets/it6.png';
+import it7 from '../assets/it7.png';
+import it8 from '../assets/it8.png';
+import milkshake from '../assets/milkshake.png';
+import n from '../assets/n.png';
+import p from '../assets/p.png';
+import pc from '../assets/pc.png';
+import pp from '../assets/pp.png';
+import pz from '../assets/pz.png';
+import R from '../assets/R.png';
+import ras from '../assets/ras.png';
+import rr from '../assets/rr.png';
+import s from '../assets/s.png';
+import sl from '../assets/sl.png';
+import sm from '../assets/sm.png';
+import st from '../assets/st.png';
 
 import menumate from '../assets/menumate.png';
 
 export default {
+  
   bg,
   chef,
   G,
@@ -46,5 +71,30 @@ export default {
   sign,
   quote,
   gericht,
+  a,
+  bt,
+  dd,
+  e,
+  f,
+  gg,
+  it4,
+  it5,
+  it6,
+  it7,
+  it8,
+  milkshake,
+  n,
+  p,
+  pc,
+  pp,
+  pz,
+  R,
+  ras,
+  rr,
+  s,
+  sl,
+  sm,
+  st,
+
   menumate
 };
