@@ -1,0 +1,21 @@
+.form-add {
+  height: 100vh;
+}
+input[type="text"] {
+  width: 100%;
+  padding: 15px;
+  font-family: var(--font-base);
+  font-size: medium;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.formButton {
+  padding: 10px 15px;
+  align-items: center;
+  font-family: var(--font-base);
+  font-weight: bolder;
+  font-size: large;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

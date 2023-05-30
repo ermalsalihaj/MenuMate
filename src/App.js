@@ -13,9 +13,13 @@ import {
   Admin,
   BookTable,
   Confirmation,
+
 } from "./container";
 import { Navbar } from "./components";
 import "./App.css";
+import ViewMenu from "./container/ViewMenu/ViewMenu";
+import Update from "./container/Update/Update";
+import AddMeal from "./container/AddMeal/AddMeal";
 
 const App = () => (
   <Router>
@@ -41,6 +45,9 @@ const App = () => (
       <Route path="/booktable" element={<BookTable />} />
       <Route path="/confirmation" element={<Confirmation />} />
       <Route path="/admin" element={<Admin />} />
+      <Route path="/viewMenu" element={<ViewMenu />} />
+      <Route path="/update/:idmenu" element={<Update />} />
+      <Route path="/addMeal" element={<AddMeal />} />
 
     </Routes>
   </Router>

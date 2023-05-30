@@ -90,6 +90,64 @@ app.delete("/delete/:id", (req, res) => {
   });
 });
 
+// Get database
+app.get("/menu", (req, res) => {
+  const q = "SELECT * FROM menu";
+  con.query(q, (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data);
+  });
+});
+
+// Insert database
+app.post("/menu", (req, res) => {
+  const q = "Insert into menu (`title`,`desc`,`price`,`cover`) VALUES(?)";
+  const VALUES = [
+    req.body.title,
+    req.body.desc,
+    req.body.price,
+    req.body.cover,
+  ];
+
+  con.query(q, [VALUES], (err, data) => {
+    if (err) return res.json(err);
+    return res.json("Meal created successfully.");
+  });
+});
+
+// Delete database
+app.delete("/menu/:idmenu", (req, res) => {
+  const idmenu = req.params.idmenu;
+  const q = "DELETE FROM menu where idmenu = ?";
+
+  con.query(q, [idmenu], (err, data) => {
+    if (err) return res.json(err);
+    return res.json("Meal deleted successfully.");
+  });
+});
+
+// Update database
+app.put("/viewMenu/:idmenu", (req, res) => {
+  const idmenu = req.params.idmenu;
+  const q =
+    "UPDATE menu SET `title` = ?, `desc` = ?, `price` = ?, `cover` = ? WHERE idmenu = ? ";
+
+  const values = [
+    req.body.title,
+    req.body.desc,
+    req.body.price,
+    req.body.cover,
+  ];
+
+  values.push(idmenu);
+
+  con.query(q, values, (err, data) => {
+    if (err) return res.json(err);
+    return res.json("Meal updated successfully.");
+  });
+});
+
+
 app.post("/register", (req, res) => {
   const email = req.body.email;
   const username = req.body.username;
