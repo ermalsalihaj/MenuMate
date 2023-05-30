@@ -1,0 +1,88 @@
+.app__bg__wrapper__section__menu {
+  display: flex;
+  background: url(http://localhost:3000/static/media/burger.5e8001288bfb994df3b0.jpg);
+  /* opacity: 0.9; */
+  background-position: center;
+  background-size: cover;
+  background-repeat: repeat;
+  background-attachment: fixed;
+  padding: 5rem 3rem 3rem 5rem;
+  height: 75vh;
+  /* margin: 20px 20px 20px 20px; */
+}
+.headtext__cormorant {
+  font-size: 45px;
+  font-weight: 500;
+}
+.app__viewMenu_menu_items {
+  display: grid;
+  grid-template-columns: 500px 500px;
+  /* grid-template-rows: repeat(5, 200px); */
+  row-gap: 55px;
+  column-gap: 150px;
+  justify-content: left;
+  padding-top: 10px;
+}
+.meal-page {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  color: white;
+}
+.headtext__cormorant_p {
+  font-family: var(--font-base);
+  color: var(--color-golden);
+  font-size: 30px;
+  line-height: 83.2px;
+  letter-spacing: 0.04em;
+  text-transform: capitalize;
+}
+.meal {
+  width: 100%;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  /* height: 150px; */
+}
+.btn {
+  display: flex;
+  justify-content: center;
+}
+.img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 30%;
+  background-color: rgb(177, 230, 244);
+}
+
+.delete {
+  font-family: var(--font-base);
+  font-size: 20px;
+  letter-spacing: 0.04rem;
+  cursor: pointer;
+  color: rgb(203, 41, 41);
+  font-weight: bolder;
+  border-bottom: 1px solid #fff;
+  height: 22px;
+  margin-top: -10px;
+}
+
+.update-btn {
+  /* font-size: 20px; */
+  cursor: pointer;
+  height: 22px;
+  margin-top: -10px;
+  text-decoration: none;
+}
+
+.update {
+  color: #fff;
+  font-family: var(--font-base);
+  font-size: 18px;
+  letter-spacing: 0.04rem;
+  cursor: pointer;
+  font-weight: bolder;
+  border-bottom: 1px solid #fff;
+  margin-left: 10px;
+}

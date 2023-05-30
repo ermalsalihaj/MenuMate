@@ -44,7 +44,13 @@ import s from '../assets/s.png';
 import sl from '../assets/sl.png';
 import sm from '../assets/sm.png';
 import st from '../assets/st.png';
-
+import burger from '../assets/burger.jpg';
+import menu1 from '../assets/menu1.png';
+import menu2 from '../assets/menu2.png';
+import menu3 from '../assets/menu-3.png';
+import menu4 from '../assets/menu-4.png';
+import menu5 from '../assets/menu-5.png';
+import menu6 from '../assets/menu-6.png';
 import menumate from '../assets/menumate.png';
 
 export default {
@@ -95,6 +101,12 @@ export default {
   sl,
   sm,
   st,
-
-  menumate
+  menumate,
+  burger,
+  menu1,
+  menu2,
+  menu3,
+  menu4,
+  menu5,
+  menu6,
 };
