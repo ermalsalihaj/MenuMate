@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./BookTable.css";
+import { images } from "../../constants";
 
 const BookTable = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -72,99 +73,114 @@ const BookTable = () => {
   );
 
   const isDateValid = selectedDate && selectedDate >= today;
-const isLocationValid = selectedLocation !== "";
-const isTimeValid = selectedTime !== "";
-const isSizeValid = selectedSize !== "";
+  const isLocationValid = selectedLocation !== "";
+  const isTimeValid = selectedTime !== "";
+  const isSizeValid = selectedSize !== "";
 
-const isFormValid =
-  isDateValid &&
-  isLocationValid &&
-  isTimeValid &&
-  isSizeValid &&
-  availableTableCount > 0;
+  const isFormValid =
+    isDateValid &&
+    isLocationValid &&
+    isTimeValid &&
+    isSizeValid &&
+    availableTableCount > 0;
 
   return (
-    <div >
-      <input
-        type="date"
-        id="date"
-        value={selectedDate}
-        onChange={handleDateSelection}
-        min={today}
-        className={`input-one ${isDateValid ? "" : "invalid"}`}
-      />
+    <div className="app__bg">
+      <div className="navbar">
+        <div className="app__navbar-logo">
+          <img src={images.menumate} alt="app logo" />
+        </div>
 
-      <select
-        value={selectedTime}
-        onChange={handleTimeSelection}
-        className={`input-one ${isTimeValid ? "" : "invalid"}`}
-      >
-        <option value="">Choose a Time</option>
-        {timeSlots.map((slot) => (
-          <option key={slot.value} value={slot.value}>
-            {slot.label}
-          </option>
-        ))}
-      </select>
+        <div className="app__navbar-spoon">
+          <img src={images.spoon} alt="about_spoon" className="spoon__img" />
+        </div>
+      </div>
 
-      <select
-        value={selectedLocation}
-        onChange={handleLocationSelection}
-        className={`input-one ${isLocationValid ? "" : "invalid"}`}
-      >
-        <option value="">Choose a Location</option>
-        {locationOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+      <div>
+        <input
+          type="date"
+          id="date"
+          value={selectedDate}
+          onChange={handleDateSelection}
+          min={today}
+          className={`input-one ${isDateValid ? "" : "invalid"}`}
+        />
 
-      <select
-        value={selectedSize}
-        onChange={handleSizeSelection}
-        className={`input-one ${isSizeValid ? "" : "invalid"}`}
-      >
-        <option value="">Choose a Table Size</option>
-        {tableSizes.map((size) => (
-          <option key={size} value={size}>
-            {size}
-          </option>
-        ))}
-      </select>
-
-      <h2>Table Availability</h2>
-      <p>Available Tables: {availableTableCount}</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Table ID</th>
-            <th>Size</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTables.map((table) => (
-            <tr key={table.id}>
-              <td>{table.id}</td>
-              <td>{table.size}</td>
-              <td>{table.available ? "Available" : "Not Available"}</td>
-            </tr>
+        <select
+          value={selectedTime}
+          onChange={handleTimeSelection}
+          className={`input-one ${isTimeValid ? "" : "invalid"}`}
+        >
+          <option value="">Choose a Time</option>
+          {timeSlots.map((slot) => (
+            <option key={slot.value} value={slot.value}>
+              {slot.label}
+            </option>
           ))}
-        </tbody>
-      </table>
+        </select>
 
+        <select
+          value={selectedLocation}
+          onChange={handleLocationSelection}
+          className={`input-one ${isLocationValid ? "" : "invalid"}`}
+        >
+          <option value="">Choose a Location</option>
+          {locationOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
 
-      {isFormValid ? (
-      <Link to="/confirmation" className="confirmation-link">
-        Confirmation
-      </Link>
-    ) : (
-      <p className="error-message">Please fill in all required fields.</p>
-    )}
+        <select
+          value={selectedSize}
+          onChange={handleSizeSelection}
+          className={`input-one ${isSizeValid ? "" : "invalid"}`}
+        >
+          <option value="">Choose a Table Size</option>
+          {tableSizes.map((size) => (
+            <option key={size} value={size}>
+              {size}
+            </option>
+          ))}
+        </select>
+      </div>
 
+      <div className="content">
+        <h1>Table Availability</h1>
+        <p>Available Tables: {availableTableCount}</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Table ID</th>
+              <th>Size</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredTables.map((table) => (
+              <tr key={table.id}>
+                <td>{table.id}</td>
+                <td>{table.size}</td>
+                <td>{table.available ? "Available" : "Not Available"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {isFormValid ? (
+        <Link to="/confirmation" className="confirmation-link">
+          <p>CONFIRM</p>
+        </Link>
+      ) : (
+        <p className="error-message">*Please fill in all required fields.</p>
+      )}
+
+      </div>
+
+      
     </div>
-
   );
 };
 

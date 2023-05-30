@@ -1,25 +1,56 @@
-.confirmation-container {
-    font-family: "Roboto", sans-serif;
-    width: 20%;
-    margin: 0 auto;
-  }
-  .confirmation-input {
-    margin-bottom: 10px;
-    color: black;
-  }
-  .confirmation-btn {
-    background-color: #e74c3c;
-    color: #fff;
-    padding: 10px 20px;
-    text-decoration: none;
-  }
+.app__bg {
+  height: 100vh;
+  width: 100%;
+}
+.navbar {
+  padding-top: 30px;
+}
+.app__navbar-spoon img {
+  width: 160px;
+}
 
-  .error-message {
-    color: red;
+.confirmation-container {
+  width: 20%;
+  margin: 0 auto;
+  color: var(--color-golden);
+  font-family: var(--font-base);
+  text-align: center;
+}
+.confirmation-container h2 {
+  margin-bottom: 20px;
+}
+input[type="email"],
+input[type="text"] {
+  width: 100%;
+  padding: 12px 8px;
+  border: none;
+}
+input[type="submit"] {
+  color: black;
+  font-weight: bold;
+}
+.confirmation-btn {
+  /* background-color: var(--color-golden);
+  color: black;
+  padding: 10px 20px;
+  text-decoration: none;
+  cursor: pointer; */
+  padding: 3.2% 18px;
+    background-color: var(--color-golden);
+    color: black;
+    margin: 2% 0;
     font-family: "Roboto";
-    margin-top: 5px;
-    font-size: 14px;
-    background: none;
-  }
-  
-  
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.error-message {
+  color: var(--color-golden);
+  font-family: "Roboto";
+  margin-top: 1px;
+  font-size: 14px;
+  background: none;
+}

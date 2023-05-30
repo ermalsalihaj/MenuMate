@@ -1,24 +1,46 @@
+.app__bg{
+  height: 100vh;
+}
+.navbar{
+  padding-top: 30px;
+}
+.app__navbar-spoon img{
+  width: 160px;
+  margin-left: 25px;
+}
+
 .input-one {
   width: 240px;
-    padding: 1% 5px;
-    background-color: #e74c3c;
-    color: white;
+    padding: 1% 7px;
+    background-color: var(--color-golden);
+    color: black;
     margin: 2% 0;
     font-family: "Roboto";
     font-size: 1.1rem;
     border: none;
     border-radius: 5px;
     text-align: center;
+    margin-left: 80px;
+    /* font-family: var(--font-base); */
 }
 
 /* BookTable.css */
+.content{
+  margin-left: 80px;
+}
+h1{
+  font-family: var(--font-base);
+  color: var(--color-golden);
+}
 p{
-  color: black;
+  color: var(--color-golden);
+  font-family: var(--font-base);
+  font-size: 20px;
 }
 table {
-  width: 70%;
+  width: 68%;
   border-collapse: collapse;
-  background-color: #e74c3c;
+  background-color: #EDC446;
   font-family: "Roboto", sans-serif;
 }
 
@@ -26,35 +48,35 @@ th,
 td {
   padding: 8px;
   text-align: left;
-  color: white;
+  color: black;
 }
 
 th {
-  background-color: #c0392b;
+  background-color: #B98319;
 }
 
 tr:nth-child(even) {
-  background-color: #d35400;
+  background-color: #D39C38;
 }
 
 tr:hover {
-  background-color: #a93226;
+  background-color: #E2BF61;
 }
 
-.confirmation-link {
+.confirmation-link p{
   font-family: "Roboto";
-  background-color: #e74c3c;
-  color: #fff;
-  padding: 10px;
+  background-color: #EDC446;
+  color: black;
   display: inline-block;
   text-decoration: none;
   margin-top: 10px;
+  padding: 12px 15px;
 }
 
 .error-message {
   font-family: "Roboto";
-  background-color: #e74c3c;
-  color: #fff;
+  background-color: #EDC446;
+  color: black;
   padding: 10px;
   margin-top: 10px;
   width: 20%;
