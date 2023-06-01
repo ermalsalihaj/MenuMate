@@ -1,68 +1,183 @@
-table {
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
+*{
+  margin: 0;
+  padding: 0;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+.admin .app__bg {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}.admin.recent-activity ul li{
+  font-size: 25px;
+}
+.admin button {
+  margin-top: 5px;
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.admin button:hover {
+  background-color: #3e8e41;
+}
+
+.admin .delete-confirmation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px; /* Adjust the height as needed */
+}
+
+.admin .buttons {
+  margin-top: 16px;
+}
+.admin .content {
+  margin-left: 250px;
+  padding: 10px;
+}
+
+.admin .home-page {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   
-  th,
-  td {
-    padding: 10px;
-    border: 1px solid black;
-  }
+}
+
+.admin .home-box {
+  background-color: #fff;
+  flex: 0 0 200px;
+  border-radius: 10px;
+  padding: 60px;
+  margin: 50px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin .recent-activity {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.admin .recent-activity ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.admin .recent-activity li {
+  margin-bottom: 10px;
   
-  th {
-    background-color: #f2f2f2;
-  }
-  
-  input[type="email"],
-  input[type="text"] {
-    width: 100%;
-    padding: 5px;
-    border: none;
-  }
-  
-  button {
-    margin-top: 5px;
-    padding: 5px 10px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #3e8e41;
-  }
-  
-  .confirm-delete-modal {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    z-index: 1;
-    overflow: auto;
-  }
-  
-  .confirm-delete-modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 5px;
-    margin-top: 100px;
-    width: 50%;
-    max-width: 500px;
-    text-align: center;
-  }
-  
-  .confirm-delete-modal-content h2 {
-    margin-top: 0;
-  }
-  
-  .confirm-delete-modal-content button {
-    margin: 10px;
-  }
-  
+}
+.admin h2{
+  font-family: var(--font-base);
+color: #EDC446;
+}
+
+.admin .home-box::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: #EDC446;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.admin .home-box:hover::before {
+  opacity: 1;
+  z-index: 0; /* Update this value */
+}
+
+.admin.home-box h2,
+.admin.home-box p {
+  color: #333;
+  position: relative;
+  z-index: 1; /* Add this line */
+}
+
+.admin.home-box p {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.admin.home-box::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background-color: #EDC446;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.admin.home-box:hover::after {
+  opacity: 1;
+}
+
+.admin table {
+  margin-left: 250px;
+  margin-top: 20px;
+}
+
+.admin .sidebar {
+  background-color: var(--color-golden);
+  font-size: 22px;
+  width: 200px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.admin ul {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.admin li {
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+  font-family: var(--font-base);
+}
+
+.admin li.active {
+  background-color: #EDC446;
+  color: #fff;
+}
+
+.admin li.logout {
+  position: absolute;
+  bottom: 20px;
+}
+
+.admin .content {
+  margin-left: 200px;
+  padding: 20px;
+}

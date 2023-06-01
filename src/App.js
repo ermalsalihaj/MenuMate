@@ -13,7 +13,6 @@ import {
   Admin,
   BookTable,
   Confirmation,
-
 } from "./container";
 import { Navbar } from "./components";
 import "./App.css";
@@ -37,7 +36,6 @@ const App = () => (
             <Gallery />
             <FindUs />
             <Footer />
-            <Admin/>
           </React.Fragment>
         }
       />
@@ -48,17 +46,8 @@ const App = () => (
       <Route path="/viewMenu" element={<ViewMenu />} />
       <Route path="/update/:idmenu" element={<Update />} />
       <Route path="/addMeal" element={<AddMeal />} />
-
     </Routes>
   </Router>
 );
 
-
-
-
 export default App;
-
-
-
-
-
