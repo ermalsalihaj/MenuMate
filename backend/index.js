@@ -234,3 +234,60 @@ app.get("/", verifyUser, (req, res) => {
 app.listen(3001, () => {
   console.log("Running on port 3001...");
 });
+
+/////////////////////////////////////////////////////////////////////////
+// Get database
+app.get("/booktable", (req, res) => {
+  const q = "SELECT * FROM booktable";
+  con.query(q, (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data);
+  });
+});
+
+// Insert database
+app.post("/booktable", (req, res) => {
+  const q = "Insert into booktable (`date`,`time`,`location`,`tablesize`) VALUES(?)";
+  const VALUES = [
+    req.body.date,
+    req.body.time,
+    req.body.location,
+    req.body.tablesize,
+  ];
+
+  con.query(q, [VALUES], (err, data) => {
+    if (err) return res.json(err);
+    return res.json("Table created successfully.");
+  });
+});
+
+// Delete database
+app.delete("/booktable/:id", (req, res) => {
+  const id = req.params.id;
+  const q = "DELETE FROM booktable where id = ?";
+
+  con.query(q, [id], (err, data) => {
+    if (err) return res.json(err);
+    return res.json("Table deleted successfully.");
+  });
+});
+
+app.put("/bookTable/:id", (req, res) => {
+  const id = req.params.id;
+  const q =
+    "UPDATE booktable SET `date` = ?, `time` = ?, `location` = ?, `tablesize` = ? WHERE id = ? ";
+
+  const values = [
+    req.body.date,
+    req.body.time,
+    req.body.location,
+    req.body.tablesize,
+  ];
+
+  values.push(id);
+
+  con.query(q, values, (err, data) => {
+    if (err) return res.json(err);
+    return res.json("Table updated successfully.");
+  });
+});

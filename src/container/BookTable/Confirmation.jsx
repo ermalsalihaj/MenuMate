@@ -55,8 +55,9 @@ const Confirmation = () => {
   };
 
   return (
-    <div className="app__bg">
-      <div className="navbar">
+    <div>
+      <div className="app__bg">
+        <div className="navbar">
           <div className="app__navbar-logo">
             <img src={images.menumate} alt="app logo" />
           </div>
@@ -66,51 +67,56 @@ const Confirmation = () => {
           </div>
         </div>
 
-      <div className="confirmation-container">
-
-        <h2>CONFIRMATION FORM</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            className="confirmation-input"
-            placeholder="Name"
-            value={name}
-            onChange={handleNameChange}
-          />
-          <br />
-          {errors.name && <span className="error-message">{errors.name}</span>}
-          <br />
-          <br />
-          <input
-            type="text"
-            className="confirmation-input"
-            placeholder="Phone Number"
-            value={phoneNumber}
-            onChange={handlePhoneNumberChange}
-          />
-          <br />
-          {errors.phoneNumber && (
-            <span className="error-message">{errors.phoneNumber}</span>
-          )}
-          <br />
-          <br />
-          <input
-            type="email"
-            className="confirmation-input"
-            placeholder="Email"
-            value={email}
-            onChange={handleEmailChange}
-          />
-          <br />
-          {errors.email && (
-            <span className="error-message">{errors.email}</span>
-          )}
-          <br />
-          <br />
-          <input type="submit" value="Book Now" className="confirmation-btn" />
-        </form>
+        <div className="confirmation-container">
+          <h2>CONFIRMATION FORM</h2>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              className="confirmation-input"
+              placeholder="Name"
+              value={name}
+              onChange={handleNameChange}
+            />
+            <br />
+            {errors.name && (
+              <span className="error-message">{errors.name}</span>
+            )}
+            <br />
+            <br />
+            <input
+              type="text"
+              className="confirmation-input"
+              placeholder="Phone Number"
+              value={phoneNumber}
+              onChange={handlePhoneNumberChange}
+            />
+            <br />
+            {errors.phoneNumber && (
+              <span className="error-message">{errors.phoneNumber}</span>
+            )}
+            <br />
+            <br />
+            <input
+              type="email"
+              className="confirmation-input"
+              placeholder="Email"
+              value={email}
+              onChange={handleEmailChange}
+            />
+            <br />
+            {errors.email && (
+              <span className="error-message">{errors.email}</span>
+            )}
+            <br />
+            <br />
+            <input
+              type="submit"
+              value="Book Now"
+              className="confirmation-btn"
+            />
+          </form>
+        </div>
       </div>
-
     </div>
   );
 };

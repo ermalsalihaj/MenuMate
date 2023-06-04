@@ -1,88 +1,68 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+
+import React, { useEffect, useState } from "react";
 import "./BookTable.css";
-import { images } from "../../constants";
+import { TableItem, SubHeading } from "../../components";
+import { data, images } from "../../constants";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const BookTable = () => {
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [tables, setTable] = useState([]);
+  const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
-  const [selectedSize, setSelectedSize] = useState("");
-  const [tables, setTables] = useState([
-    { id: 1, size: 2, available: true, time: "09:00", location: "inside" },
-    { id: 2, size: 4, available: false, time: "10:00", location: "outside" },
-    { id: 3, size: 6, available: true, time: "11:00", location: "inside" },
-    // Add more tables with their respective time and location properties
-  ]);
+  const [selectedTableSize, setSelectedTableSize] = useState("");
+  const [isFormValid, setIsFormValid] = useState(true);
 
-  const handleDateSelection = (event) => {
-    setSelectedDate(event.target.value);
-  };
-
-  const handleTimeSelection = (event) => {
-    setSelectedTime(event.target.value);
-  };
-
-  const handleLocationSelection = (event) => {
-    setSelectedLocation(event.target.value);
-  };
-
-  const handleSizeSelection = (event) => {
-    setSelectedSize(event.target.value);
-  };
-
-  const timeSlots = [
-    { label: "9AM", value: "09:00" },
-    { label: "10AM", value: "10:00" },
-    { label: "11AM", value: "11:00" },
-    { label: "12PM", value: "12:00" },
-    { label: "1PM", value: "13:00" },
-    { label: "2PM", value: "14:00" },
-    { label: "3PM", value: "15:00" },
-    { label: "4PM", value: "16:00" },
-    { label: "5PM", value: "17:00" },
-  ];
-
-  const locationOptions = [
-    { label: "Any Location", value: "any" },
-    { label: "Inside", value: "inside" },
-    { label: "Outside", value: "outside" },
-  ];
-
-  const tableSizes = [1, 2, 3, 4, 5, 6, 7];
-
-  const filterTables = () => {
-    return tables.filter((table) => {
-      if (
-        (selectedTime === "" || selectedTime === table.time) &&
-        (selectedLocation === "" || selectedLocation === table.location)
-      ) {
-        return true;
+  useEffect(() => {
+    const fetchAllTables = async () => {
+      try {
+        const res = await axios.get("http://localhost:3001/booktable");
+        setTable(res.data);
+      } catch (err) {
+        console.log(err);
       }
-      return false;
-    });
+    };
+    fetchAllTables();
+  }, []);
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete("http://localhost:3001/booktable/" + id);
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const filteredTables = filterTables();
+  const handleFormSubmit = () => {
+    // Check if any of the fields are empty
+    if (
+      selectedDate === "" ||
+      selectedTime === "" ||
+      selectedLocation === "" ||
+      selectedTableSize === ""
+    ) {
+      setIsFormValid(false);
+    } else {
+      // All fields are filled, proceed with form submission or further actions
+      setIsFormValid(true);
+      // Perform desired actions here
+    }
+  };
 
-  const today = new Date().toISOString().split("T")[0];
-
-  const availableTableCount = filteredTables.reduce(
-    (count, table) => (table.available ? count + 1 : count),
-    0
-  );
-
-  const isDateValid = selectedDate && selectedDate >= today;
-  const isLocationValid = selectedLocation !== "";
-  const isTimeValid = selectedTime !== "";
-  const isSizeValid = selectedSize !== "";
-
-  const isFormValid =
-    isDateValid &&
-    isLocationValid &&
-    isTimeValid &&
-    isSizeValid &&
-    availableTableCount > 0;
+   // Filtering logic
+   const filteredTables = tables.filter((table) => {
+    if (
+      (selectedDate !== "" && table.date !== selectedDate) ||
+      (selectedTime !== "" && table.time !== selectedTime) ||
+      (selectedLocation !== "" && table.location !== selectedLocation) ||
+      (selectedTableSize !== "" && table.tablesize !== selectedTableSize)
+    ) {
+      return false; // Exclude the table if it doesn't match any of the selected filters
+    }
+    return true;
+  });
 
   return (
     <div className="app__bg">
@@ -97,89 +77,90 @@ const BookTable = () => {
       </div>
 
       <div>
-        <input
-          type="date"
-          id="date"
-          value={selectedDate}
-          onChange={handleDateSelection}
-          min={today}
-          className={`input-one ${isDateValid ? "" : "invalid"}`}
+        <input type="date" 
+        id="date" 
+        value={selectedDate}
+        onChange={(e) => setSelectedDate(e.target.value)}
         />
-
-        <select
-          value={selectedTime}
-          onChange={handleTimeSelection}
-          className={`input-one ${isTimeValid ? "" : "invalid"}`}
+        
+        <select 
+        className={`input-one `}
+        value={selectedTime}
+        onChange={(e) => setSelectedTime(e.target.value)}
         >
           <option value="">Choose a Time</option>
-          {timeSlots.map((slot) => (
-            <option key={slot.value} value={slot.value}>
-              {slot.label}
-            </option>
-          ))}
+          <option value="9AM">9AM</option>
+          <option value="10AM">10AM</option>
+          <option value="11AM">11AM</option>
+          <option value="12PM">12PM</option>
+          <option value="1PM">1PM</option>
+          <option value="2PM">2PM</option>
+          <option value="3PM">3PM</option>
+          <option value="4PM">4PM</option>
+          <option value="5PM">5PM</option>
         </select>
 
-        <select
+        <select 
+          className={`input-one `}
           value={selectedLocation}
-          onChange={handleLocationSelection}
-          className={`input-one ${isLocationValid ? "" : "invalid"}`}
+          onChange={(e) => setSelectedLocation(e.target.value)}
         >
           <option value="">Choose a Location</option>
-          {locationOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
+          <option value="any location">Any Location</option>
+          <option value="inside">Inside</option>
+          <option value="outside">Outside</option>
         </select>
 
-        <select
-          value={selectedSize}
-          onChange={handleSizeSelection}
-          className={`input-one ${isSizeValid ? "" : "invalid"}`}
-        >
+        <select 
+          className={`input-one `}
+          value={selectedTableSize}
+          onChange={(e) => setSelectedTableSize(e.target.value)}
+          >
           <option value="">Choose a Table Size</option>
-          {tableSizes.map((size) => (
-            <option key={size} value={size}>
-              {size}
-            </option>
-          ))}
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
         </select>
       </div>
 
       <div className="content">
-        <h1>Table Availability</h1>
-        <p>Available Tables: {availableTableCount}</p>
+        
+        <h1>Table Availability</h1> 
+        <p>Available Tables: </p>
+        {filteredTables.map((table) => (
+          <div key={table.id}>
+            <div>
+              <TableItem
+                date={table.date}
+                time={table.time}
+                location={table.location}
+                tablesize={table.tablesize}
+              />
+            </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Table ID</th>
-              <th>Size</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredTables.map((table) => (
-              <tr key={table.id}>
-                <td>{table.id}</td>
-                <td>{table.size}</td>
-                <td>{table.available ? "Available" : "Not Available"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {isFormValid ? (
-        <Link to="/confirmation" className="confirmation-link">
-          <p>CONFIRM</p>
-        </Link>
-      ) : (
-        <p className="error-message">*Please fill in all required fields.</p>
-      )}
-
-      </div>
-
+            {/* <div>
+              <p className="delete" onClick={() => handleDelete(table.idmenu)}>
+                Delete
+              </p>
+              <Link to={`/update/${table.idmenu}`}>
+                <p> Update</p>
+              </Link>
+            </div> */}
+          </div>
+        ))}
+        
+          <button onClick={handleFormSubmit} className="confirmation-link">
+            <p>CONFIRM</p>
+          </button>
       
+        {!isFormValid && (
+          <p className="error-message">*Please fill in all required fields.</p>
+        )}
+      </div>
     </div>
   );
 };

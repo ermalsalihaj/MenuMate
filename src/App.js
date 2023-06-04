@@ -20,6 +20,7 @@ import "./App.css";
 import ViewMenu from "./container/ViewMenu/ViewMenu";
 import Update from "./container/Update/Update";
 import AddMeal from "./container/AddMeal/AddMeal";
+import AddTable from "./container/AddTable/AddTable";
 
 const App = () => (
   <Router>
@@ -47,7 +48,9 @@ const App = () => (
       <Route path="/admin" element={<Admin />} />
       <Route path="/viewMenu" element={<ViewMenu />} />
       <Route path="/update/:idmenu" element={<Update />} />
+     
       <Route path="/addMeal" element={<AddMeal />} />
+      <Route path="/addTable" element={<AddTable />} />
 
     </Routes>
   </Router>
