@@ -38,7 +38,7 @@ const App = () => (
             <Gallery />
             <FindUs />
             <Footer />
-            <Admin/>
+            
           </React.Fragment>
         }
       />
