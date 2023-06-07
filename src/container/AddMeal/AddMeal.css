@@ -1,6 +1,17 @@
-.form-add {
+.app__bg {
   height: 100vh;
 }
+.form-add {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-add h2 {
+  text-align: center;
+}
+
 input[type="text"] {
   width: 100%;
   padding: 15px;
@@ -9,6 +20,7 @@ input[type="text"] {
   font-weight: bold;
   margin-bottom: 10px;
 }
+
 .formButton {
   padding: 10px 15px;
   align-items: center;
@@ -18,4 +30,8 @@ input[type="text"] {
   width: 100%;
   display: flex;
   justify-content: center;
+  background-color: green;
+  color: white;
+  border: none;
+  cursor: pointer;
 }

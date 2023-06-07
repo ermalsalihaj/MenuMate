@@ -3,6 +3,7 @@ const mysql = require("mysql");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+const { DateTime } = require('luxon');
 
 const app = express();
 
@@ -147,7 +148,6 @@ app.put("/viewMenu/:idmenu", (req, res) => {
   });
 });
 
-
 app.post("/register", (req, res) => {
   const email = req.body.email;
   const username = req.body.username;
@@ -181,17 +181,18 @@ app.post("/login", (req, res) => {
       } else {
         if (result.length > 0) {
           const token = jwt.sign(
-            { idusers: result[0].idusers, role: result[0].role },
+            { idusers: result[0].id, role: result[0].role },
             "jwtkey"
           );
           const { password, ...others } = result[0];
+          const role = result[0].role; 
 
           res
             .cookie("accessToken", token, {
               httpOnly: true,
             })
             .status(200)
-            .json(others);
+            .json({ ...others, role }); 
         } else {
           res.send({ message: "Wrong username or password." });
         }
@@ -223,7 +224,7 @@ const verifyUser = (req, res, next) => {
 };
 app.get("/admin", verifyUser, (req, res) => {
   if (req.role === "admin") {
-    res.redirect("/admin");
+    res.status(200).json({ message: "Access granted. Logged in as Admin." });
   } else {
     res.status(403).json({ message: "Access denied. Admin role required." });
   }
@@ -247,9 +248,10 @@ app.get("/booktable", (req, res) => {
 
 // Insert database
 app.post("/booktable", (req, res) => {
-  const q = "Insert into booktable (`date`,`time`,`location`,`tablesize`) VALUES(?)";
+  const q =
+    "Insert into booktable (`date`,`time`,`location`,`tablesize`) VALUES(?)";
   const VALUES = [
-    req.body.date,
+    DateTime.fromISO(req.body.date, { zone: 'Europe/Belgrade' }).plus({ days: 1 }).toISODate(),
     req.body.time,
     req.body.location,
     req.body.tablesize,
@@ -278,7 +280,7 @@ app.put("/bookTable/:id", (req, res) => {
     "UPDATE booktable SET `date` = ?, `time` = ?, `location` = ?, `tablesize` = ? WHERE id = ? ";
 
   const values = [
-    req.body.date,
+    DateTime.fromISO(req.body.date, { zone: 'Europe/Belgrade' }).plus({ days: 1 }).toISODate(),
     req.body.time,
     req.body.location,
     req.body.tablesize,
@@ -289,5 +291,88 @@ app.put("/bookTable/:id", (req, res) => {
   con.query(q, values, (err, data) => {
     if (err) return res.json(err);
     return res.json("Table updated successfully.");
+  });
+});
+app.get("/reservations", (req, res) => {
+  con.query("SELECT * FROM reservations", (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send({ message: "An error occurred." });
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+app.post("/reservations", (req, res) => {
+  const { name, phoneNumber, email } = req.body;
+
+  con.query(
+    "INSERT INTO reservations (name, phoneNumber, email) VALUES (?, ?, ?)",
+    [name, phoneNumber, email],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send({ message: "An error occurred." });
+      } else {
+        res.send({ message: "Reservation created successfully." });
+      }
+    }
+  );
+});
+
+app.get("/reservations/:id", (req, res) => {
+  const id = req.params.id;
+
+  con.query("SELECT * FROM reservations WHERE idreservations = ?", [id], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send({ message: "An error occurred." });
+    } else {
+      if (result.length > 0) {
+        res.send(result[0]);
+      } else {
+        res.send({ message: "Reservation not found." });
+      }
+    }
+  });
+});
+
+app.put("/reservations/:id", (req, res) => {
+  const id = req.params.id;
+  const { name, phoneNumber, email } = req.body;
+
+  con.query(
+    "UPDATE reservations SET name = ?, phoneNumber = ?, email = ? WHERE idreservations = ?",
+    [name, phoneNumber, email, id],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send({ message: "An error occurred." });
+      } else {
+        if (result.affectedRows > 0) {
+          res.send({ message: "Reservation updated successfully." });
+        } else {
+          res.send({ message: "Reservation not found." });
+        }
+      }
+    }
+  );
+});
+
+app.delete("/reservations/:id", (req, res) => {
+  const id = req.params.id;
+
+  con.query("DELETE FROM reservations WHERE idreservations = ?", [id], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send({ message: "An error occurred." });
+    } else {
+      if (result.affectedRows > 0) {
+        res.send({ message: "Reservation deleted successfully." });
+      } else {
+        res.send({ message: "Reservation not found." });
+      }
+    }
   });
 });

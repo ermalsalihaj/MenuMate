@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios"; // Import axios for making HTTP requests
 import "./Confirmation.css";
 import { images } from "../../constants";
 
@@ -45,12 +46,24 @@ const Confirmation = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (validateForm()) {
-      // Perform the submission or other actions here
-      console.log("Form is valid, submitting data...");
+      try {
+        // Send a POST request to create a reservation
+        await axios.post("http://localhost:3001/reservations", {
+          name,
+          phoneNumber,
+          email,
+        });
+
+        // Perform any other actions or redirect to a success page
+        console.log("Reservation created successfully.");
+
+      } catch (error) {
+        console.error("An error occurred:", error);
+      }
     }
   };
 

@@ -1,52 +1,63 @@
-.app__bg{
-    height: 100vh;
-  }
-  .navbar{
-    padding-top: 30px;
-  }
-  .app__navbar-spoon img{
-    width: 160px;
-    margin-left: 25px;
-  }
+.app__bg {
+  height: 100vh;
+}
 
+.navbar {
+  padding-top: 30px;
+}
 
+.app__navbar-spoon img {
+  width: 160px;
+  margin-left: 25px;
+}
 
-  
-  input[type="date"] {
-    width: 100% ;
-    padding: 15px;
-    font-family: var(--font-base);
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  input[type="text"] {
-    width: 100%;
-    padding: 15px;
-    font-family: var(--font-base);
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  input[type="number"] {
-    width: 100%;
-    padding: 15px;
-    font-family: var(--font-base);
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  /* input[type="number"]::placeholder {
-    
-  } */
-  .formButton {
-    padding: 10px 15px;
-    align-items: center;
-    font-family: var(--font-base);
-    font-weight: bolder;
-    font-size: large;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
-  
+.flex__center {
+  display: flex;
+  justify-content: center;
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+  margin: 0;
+}
+
+.table-container input,
+.table-container select {
+  width: 100%;
+  padding: 15px;
+  font-family: var(--font-base);
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.table-container select {
+  margin-left: 10px;
+}
+
+.table-container .formButton {
+  padding: 10px 15px;
+  align-items: center;
+  font-family: var(--font-base);
+  font-weight: bolder;
+  font-size: large;
+  background: #428059;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.table-container .form-inline {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.table-container .form-inline input[type="text"] {
+  width: 57%;
+}
