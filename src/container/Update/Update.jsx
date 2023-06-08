@@ -6,7 +6,7 @@ import './Update.css';
 const Update = () => {
   const [menu,setmenu] = useState({
     title:"",
-    desc:"",
+    description:"",
     price:"",
     cover:""
   });
@@ -61,7 +61,7 @@ const Update = () => {
       <h2 className='app__specialMenu-menu_heading'>Update Menu</h2>
 
       <input type="text" placeholder='title' onChange={handleChange} name='title' value={menu.title} />
-      <input type="text" placeholder='desc' onChange={handleChange}  name='desc' value={menu.desc}/>
+      <input type="text" placeholder='description' onChange={handleChange}  name='description' value={menu.description}/>
       <input type="text" placeholder='price' onChange={handleChange}  name='price' value={menu.price}/>
       <input type="text" placeholder='cover' onChange={handleChange}  name='cover' value={menu.cover}/>
 

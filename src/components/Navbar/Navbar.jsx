@@ -11,9 +11,7 @@ const Navbar = () => {
   const [auth, setAuth] = useState(false);
   const [name, setName] = useState("");
   const [toggleMenu, setToggleMenu] = useState(false);
-  const [role, setRole] = useState("");
-  const allowedRoles = ["admin", "user"];
-  const userRole = "admin";
+  const role = localStorage.getItem("role");
 
   useEffect(() => {
     const verify = async () => {
@@ -36,30 +34,6 @@ const Navbar = () => {
         withCredentials: true,
       });
       setAuth(false);
-      setName("");
-    } catch (err) {
-      console.log(err.response.data);
-    }
-  };
-  const handleAdmin = async () => {
-    try {
-      await axios.post("http://localhost:3001/login", null, {
-        withCredentials: true,
-      });
-      setAuth(true);
-      setRole("admin");
-      setName("");
-    } catch (err) {
-      console.log(err.response.data);
-    }
-  };
-  const handleUser = async () => {
-    try {
-      await axios.post("http://localhost:3001/login", null, {
-        withCredentials: true,
-      });
-      setAuth(true);
-      setRole("user");
       setName("");
     } catch (err) {
       console.log(err.response.data);
@@ -93,14 +67,14 @@ const Navbar = () => {
           {" "}
           <a href="#contact">Contact</a>
         </li>
-        {auth &&  (
+        {auth && role === "admin" &&  (
           <li>
-            <Link to="/admin" onClick={handleAdmin} className="p__opensans">
+            <Link to="/admin" className="p__opensans">
               Dashboard
             </Link>
           </li>
         )}
-      </ul>
+      </ul> 
 
       <div className="app__navbar-login">
         {auth ? (
@@ -116,9 +90,16 @@ const Navbar = () => {
         )}
 
         <li>
-          {auth &&  (
-            <Link to="/booktable" onClick={handleUser} className="p__opensans">
+          {auth && role === "user" &&  (
+            <Link to="/booktable" className="p__opensans">
               Book Table
+            </Link>
+          )}
+        </li>
+        <li>
+          {auth && role === "admin" &&  (
+            <Link to="/addTable" className="p__opensans">
+              Add Table
             </Link>
           )}
         </li>

@@ -52,6 +52,13 @@ import menu4 from '../assets/menu-4.png';
 import menu5 from '../assets/menu-5.png';
 import menu6 from '../assets/menu-6.png';
 import menumate from '../assets/menumate.png';
+import drink1 from "../assets/drink1.png";
+import drink2 from "../assets/drink2.jpg";
+import drink3 from "../assets/drink3.png";
+import drink4 from "../assets/drink4.png";
+import drink5 from "../assets/drink5.png";
+import drink6 from "../assets/drink6.png";
+import drink7 from "../assets/drink7.png";
 
 export default {
   
@@ -109,4 +116,11 @@ export default {
   menu4,
   menu5,
   menu6,
+  drink1,
+  drink2,
+  drink3,
+  drink4,
+  drink5,
+  drink6,
+  drink7,
 };

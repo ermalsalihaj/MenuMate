@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DateTime } from 'luxon';
+import { DateTime } from "luxon";
 import "./BookTable.css";
 import { TableItem, SubHeading } from "../../components";
 import { data, images } from "../../constants";

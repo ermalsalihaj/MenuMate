@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios"; // Import axios for making HTTP requests
 import "./Confirmation.css";
 import { images } from "../../constants";
@@ -47,7 +47,7 @@ const Confirmation = () => {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    // event.preventDefault();
 
     if (validateForm()) {
       try {

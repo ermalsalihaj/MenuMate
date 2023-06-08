@@ -13,6 +13,7 @@ function Login() {
   const [loginStatus, setLoginStatus] = useState("");
   const [registerStatus, setRegisterStatus] = useState("");
   const [showRegisterForm, setShowRegisterForm] = useState(false);
+  const [role, setRole] = useState("");
 
   const register = (e) => {
     e.preventDefault();
@@ -37,11 +38,13 @@ function Login() {
     Axios.post("http://localhost:3001/login", {
       username: username,
       password: password,
+      role:role,
     }).then((response) => {
       if (response.data.message) {
         setLoginStatus(response.data.message);
       } else {
         setLoginStatus("Login was successful");
+        localStorage.setItem("role", response.data.role);
         navigate("/");
       }
     });

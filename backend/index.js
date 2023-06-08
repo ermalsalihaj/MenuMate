@@ -3,7 +3,7 @@ const mysql = require("mysql");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-const { DateTime } = require('luxon');
+const { DateTime } = require("luxon");
 
 const app = express();
 
@@ -148,6 +148,64 @@ app.put("/viewMenu/:idmenu", (req, res) => {
   });
 });
 
+
+// Get database
+app.get("/drinks", (req, res) => {
+  const q = "SELECT * FROM drinks";
+  con.query(q, (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data);
+  });
+});
+
+// Insert database
+app.post("/drinks", (req, res) => {
+  const q = "Insert into drinks (`name`,`ingredients`,`price`,`cover`) VALUES(?)";
+  const VALUES = [
+    req.body.name,
+    req.body.ingredients,
+    req.body.price,
+    req.body.cover,
+  ];
+
+  con.query(q, [VALUES], (err, data) => {
+    if (err) return res.json(err);
+    return res.json("Drink created successfully.");
+  });
+});
+
+// Delete database
+app.delete("/drinks/:iddrinks", (req, res) => {
+  const iddrinks = req.params.iddrinks;
+  const q = "DELETE FROM drinks where iddrinks = ?";
+
+  con.query(q, [iddrinks], (err, data) => {
+    if (err) return res.json(err);
+    return res.json("Drink deleted successfully.");
+  });
+});
+
+// Update database
+app.put("/viewMenu/:iddrinks", (req, res) => {
+  const iddrinks = req.params.iddrinks;
+  const q =
+    "UPDATE menu SET `name` = ?, `ingredients` = ?, `price` = ?, `cover` = ? WHERE iddrinks = ? ";
+
+  const values = [
+    req.body.name,
+    req.body.ingredients,
+    req.body.price,
+    req.body.cover,
+  ];
+
+  values.push(iddrinks);
+
+  con.query(q, values, (err, data) => {
+    if (err) return res.json(err);
+    return res.json("Drink updated successfully.");
+  });
+});
+
 app.post("/register", (req, res) => {
   const email = req.body.email;
   const username = req.body.username;
@@ -186,6 +244,14 @@ app.post("/login", (req, res) => {
           );
           const { password, ...others } = result[0];
           const role = result[0].role; 
+
+          if (result[0].role === "admin") {
+            console.log("Admin logged in:", result[0].username);
+          }
+
+          if (result[0].role === "user") {
+            console.log("User logged in:", result[0].username);
+          }
 
           res
             .cookie("accessToken", token, {

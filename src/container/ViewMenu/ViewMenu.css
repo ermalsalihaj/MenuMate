@@ -10,6 +10,42 @@
   height: 75vh;
   /* margin: 20px 20px 20px 20px; */
 }
+
+.app__bg__wrapper__section__drinks{
+  display: grid;
+  grid-template-columns: 50% 50%;
+  /* background: url(http://localhost:3000/static/media/drink2.70137cc48cb63d996d15.jpg); */
+  /* opacity: 0.9; */
+  background-position: center;
+  background-size: cover;
+  background-repeat: repeat;
+  background-attachment: fixed;
+  /* padding: 5rem 3rem 3rem 5rem; */
+  height: 75vh;
+}
+
+.app__bg__wrapper__padding_drinks{
+  display: flex;
+  background-position: center;
+  background-size: cover;
+  background-repeat: repeat;
+  background-attachment: fixed;
+  padding-left: 4rem;
+}
+
+.app__wrapper_img_drink {
+  flex: 1;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 2rem;
+}
+
+.app__wrapper_img_drink img{
+  width: 55%;
+}
+
 .headtext__cormorant {
   font-size: 45px;
   font-weight: 500;
@@ -23,8 +59,25 @@
   justify-content: left;
   padding-top: 10px;
 }
+
+.app__viewMenu_drinks_items{
+  display: grid;
+  grid-template-columns: 500px 500px;
+  /* grid-template-rows: repeat(5, 200px); */
+  row-gap: 55px;
+  column-gap: 150px;
+  justify-content: left;
+  padding-top: 10px;
+}
 .meal-page {
   display: flex;
+  gap: 10px;
+  align-items: center;
+  color: white;
+}
+.drink-page {
+  display: flex;
+  flex-direction: column;
   gap: 10px;
   align-items: center;
   color: white;
@@ -44,6 +97,14 @@
   flex-direction: column;
   /* height: 150px; */
 }
+.drink {
+  width: 90%;
+  margin: 1rem 0;
+  display: grid;
+  justify-content: center;
+  flex-direction: column;
+  /* height: 150px; */
+}
 .btn {
   display: flex;
   justify-content: center;
@@ -51,6 +112,14 @@
 .img {
   width: 100px;
   height: 100px;
+  object-fit: cover;
+  border-radius: 30%;
+  background-color: rgb(177, 230, 244);
+}
+
+.img_drink{
+  width: 250px;
+  height: 280px;
   object-fit: cover;
   border-radius: 30%;
   background-color: rgb(177, 230, 244);
@@ -85,4 +154,20 @@
   font-weight: bolder;
   border-bottom: 1px solid #fff;
   margin-left: 10px;
+}
+
+
+.app__wrapper_info_drinks{
+  background: url(	http://localhost:3000/static/media/drink4.7a25242901278349b9cc.png);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  background-repeat: repeat;
+}
+
+#img_drink{
+  background: url(	http://localhost:3000/static/media/drink3.16f4594a92c636fbcf0c.png);
+  background-repeat: repeat;
 }

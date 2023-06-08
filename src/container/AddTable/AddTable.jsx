@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { images } from "../../constants";
-import { DateTime } from 'luxon';
+import { DateTime } from "luxon";
 import "./AddTable.css";
 
 const AddTable = () => {
@@ -80,6 +80,7 @@ const AddTable = () => {
         <div className="table-container">
           <h2 className="app__specialMenu-menu_heading">Add new Table</h2>
           <input
+            style= {{marginLeft: "-1px"}}
             type="date"
             placeholder="Date"
             onChange={handleChange}
@@ -94,6 +95,7 @@ const AddTable = () => {
             value={table.time}
           />
           <select
+            style= {{marginLeft: "-1px"}}
             className="input-one"
             value={table.location}
             onChange={handleChange}
