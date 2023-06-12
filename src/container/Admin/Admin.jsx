@@ -405,6 +405,7 @@ const Admin = () => {
                   <th>Name</th>
                   <th>Phone Number</th>
                   <th>Email</th>
+                  <th>Table Number</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -415,6 +416,7 @@ const Admin = () => {
                     <td>{confirmation.name}</td>
                     <td>{confirmation.phonenumber}</td>
                     <td>{confirmation.email}</td>
+                    <td>{confirmation.idtable}</td>
                     <td>
                       <button
                         onClick={() =>

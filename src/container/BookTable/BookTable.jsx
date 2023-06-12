@@ -36,7 +36,7 @@ const BookTable = () => {
     }
   };
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = (id) => {
     // Check if any of the fields are empty
     if (
       selectedDate === "" ||
@@ -49,7 +49,7 @@ const BookTable = () => {
       setIsFormValid(true);
       const belgradeDate = DateTime.fromISO(selectedDate, { zone: 'Europe/Belgrade' }).toISODate();
       if (filteredTables.length > 0) {
-        navigate("/confirmation");
+        navigate(`/confirmation/${id}`);
       }
     }
   };
@@ -144,15 +144,28 @@ const BookTable = () => {
                   tablesize={table.tablesize}
                 />
               </div>
+              
             </div>
           ))
         ) : (
           <p>No tables available matching the selected filters.</p>
         )}
-
-        <button onClick={handleFormSubmit} className="button-light-yellow">
+        {filteredTables.map(table => (
+          // <Link to={`/confirmation/${table.id}`}>confirmation</Link>
+          // isFormValid && (
+          //   <button
+          //     onClick={() => handleFormSubmit(table.id)}
+          //     className="button-light-yellow"
+          //   >
+          //     <p>CONFIRM</p>
+          //   </button>
+          // )
+          <button onClick={() => handleFormSubmit(table.id)}
+          className="button-light-yellow">
           <p>CONFIRM</p>
         </button>
+        ))}
+      
 
         {!isFormValid && (
           <p className="error-message">*Please fill in all required fields.</p>

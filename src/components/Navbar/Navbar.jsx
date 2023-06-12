@@ -103,6 +103,13 @@ const Navbar = () => {
             </Link>
           )}
         </li>
+        <li>
+          {auth && role === "staff" &&  (
+            <Link to="/inventory" className="p__opensans">
+              Inventory
+            </Link>
+          )}
+        </li>
       </div>
 
       <div className="app__navbar-smallscreen">

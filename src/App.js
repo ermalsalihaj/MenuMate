@@ -22,13 +22,7 @@ import Update from "./container/Update/Update";
 import AddMeal from "./container/AddMeal/AddMeal";
 import AddTable from "./container/AddTable/AddTable";
 import AddDrink from "./container/AddDrink/AddDrink";
-
-const USER_TYPES = {
-  USER: "User",
-  ADMIN: "Admin",
-};
-
-const currentUserType = USER_TYPES.ADMIN;
+import Inventory from "./container/Inventory/Inventory";
 
 const App = () => {
   return (      
@@ -52,7 +46,7 @@ const App = () => {
           />
           <Route path="/login" element={<Login />} />
           <Route path="/booktable" element={<BookTable />} />
-          <Route path="/confirmation" element={<Confirmation />} />
+          <Route path="/confirmation/:id" element={<Confirmation />} />
           <Route
             path="/admin"
             element={
@@ -65,6 +59,7 @@ const App = () => {
           <Route path="/addMeal" element={<AddMeal />} />
           <Route path="/addTable" element={<AddTable /> } />
           <Route path="/addDrink" element={<AddDrink /> } />
+          <Route path="/inventory" element={<Inventory /> } />
         </Routes>
       </Router>
   );

@@ -19,7 +19,7 @@ const Update = () => {
 
   const menuId = location.pathname.split("/")[2];
 
-  useEffect(() => {
+  useEffect(() => { 
     const fetchMeal = async () => {
       try {
         const response = await axios.get("http://localhost:3001/menu/" )

@@ -59,6 +59,7 @@ import drink4 from "../assets/drink4.png";
 import drink5 from "../assets/drink5.png";
 import drink6 from "../assets/drink6.png";
 import drink7 from "../assets/drink7.png";
+import alert from "../assets/alert.jpg";
 
 export default {
   
@@ -123,4 +124,5 @@ export default {
   drink5,
   drink6,
   drink7,
+  alert
 };

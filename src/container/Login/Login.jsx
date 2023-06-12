@@ -45,6 +45,12 @@ function Login() {
       } else {
         setLoginStatus("Login was successful");
         localStorage.setItem("role", response.data.role);
+
+        if(response.data.role === "staff"){
+          navigate("/inventory")
+          console.log(response.data.role);
+        }
+        
         navigate("/");
       }
     });

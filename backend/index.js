@@ -148,7 +148,6 @@ app.put("/viewMenu/:idmenu", (req, res) => {
   });
 });
 
-
 // Get database
 app.get("/drinks", (req, res) => {
   const q = "SELECT * FROM drinks";
@@ -160,7 +159,8 @@ app.get("/drinks", (req, res) => {
 
 // Insert database
 app.post("/drinks", (req, res) => {
-  const q = "Insert into drinks (`name`,`ingredients`,`price`,`cover`) VALUES(?)";
+  const q =
+    "Insert into drinks (`name`,`ingredients`,`price`,`cover`) VALUES(?)";
   const VALUES = [
     req.body.name,
     req.body.ingredients,
@@ -206,6 +206,23 @@ app.put("/viewMenu/:iddrinks", (req, res) => {
   });
 });
 
+app.get("/stock", (req, res) => {
+  const q = "SELECT * FROM stock";
+  con.query(q, (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data);
+  });
+});
+
+app.get("/register", (req, res) => {
+  const q =
+    "SELECT * FROM stock s inner join wastage w on s.id=w.idstock ";
+  con.query(q, (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data);
+  });
+});
+
 app.post("/register", (req, res) => {
   const email = req.body.email;
   const username = req.body.username;
@@ -243,7 +260,7 @@ app.post("/login", (req, res) => {
             "jwtkey"
           );
           const { password, ...others } = result[0];
-          const role = result[0].role; 
+          const role = result[0].role;
 
           if (result[0].role === "admin") {
             console.log("Admin logged in:", result[0].username);
@@ -258,7 +275,7 @@ app.post("/login", (req, res) => {
               httpOnly: true,
             })
             .status(200)
-            .json({ ...others, role }); 
+            .json({ ...others, role });
         } else {
           res.send({ message: "Wrong username or password." });
         }
@@ -317,7 +334,9 @@ app.post("/booktable", (req, res) => {
   const q =
     "Insert into booktable (`date`,`time`,`location`,`tablesize`) VALUES(?)";
   const VALUES = [
-    DateTime.fromISO(req.body.date, { zone: 'Europe/Belgrade' }).plus({ days: 1 }).toISODate(),
+    DateTime.fromISO(req.body.date, { zone: "Europe/Belgrade" })
+      .plus({ days: 1 })
+      .toISODate(),
     req.body.time,
     req.body.location,
     req.body.tablesize,
@@ -346,7 +365,9 @@ app.put("/bookTable/:id", (req, res) => {
     "UPDATE booktable SET `date` = ?, `time` = ?, `location` = ?, `tablesize` = ? WHERE id = ? ";
 
   const values = [
-    DateTime.fromISO(req.body.date, { zone: 'Europe/Belgrade' }).plus({ days: 1 }).toISODate(),
+    DateTime.fromISO(req.body.date, { zone: "Europe/Belgrade" })
+      .plus({ days: 1 })
+      .toISODate(),
     req.body.time,
     req.body.location,
     req.body.tablesize,
@@ -360,6 +381,7 @@ app.put("/bookTable/:id", (req, res) => {
   });
 });
 app.get("/reservations", (req, res) => {
+  const id = req.params.id;
   con.query("SELECT * FROM reservations", (err, result) => {
     if (err) {
       console.log(err);
@@ -371,11 +393,11 @@ app.get("/reservations", (req, res) => {
 });
 
 app.post("/reservations", (req, res) => {
-  const { name, phoneNumber, email } = req.body;
+  const { name, phoneNumber, email, idtable } = req.body;
 
   con.query(
-    "INSERT INTO reservations (name, phoneNumber, email) VALUES (?, ?, ?)",
-    [name, phoneNumber, email],
+    "INSERT INTO reservations (name, phoneNumber, email, idtable) VALUES (?, ?, ?, ?)",
+    [name, phoneNumber, email, idtable],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -390,18 +412,22 @@ app.post("/reservations", (req, res) => {
 app.get("/reservations/:id", (req, res) => {
   const id = req.params.id;
 
-  con.query("SELECT * FROM reservations WHERE idreservations = ?", [id], (err, result) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send({ message: "An error occurred." });
-    } else {
-      if (result.length > 0) {
-        res.send(result[0]);
+  con.query(
+    "SELECT * FROM reservations WHERE idreservations = ?",
+    [id],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send({ message: "An error occurred." });
       } else {
-        res.send({ message: "Reservation not found." });
+        if (result.length > 0) {
+          res.send(result[0]);
+        } else {
+          res.send({ message: "Reservation not found." });
+        }
       }
     }
-  });
+  );
 });
 
 app.put("/reservations/:id", (req, res) => {
@@ -429,16 +455,20 @@ app.put("/reservations/:id", (req, res) => {
 app.delete("/reservations/:id", (req, res) => {
   const id = req.params.id;
 
-  con.query("DELETE FROM reservations WHERE idreservations = ?", [id], (err, result) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send({ message: "An error occurred." });
-    } else {
-      if (result.affectedRows > 0) {
-        res.send({ message: "Reservation deleted successfully." });
+  con.query(
+    "DELETE FROM reservations WHERE idreservations = ?",
+    [id],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send({ message: "An error occurred." });
       } else {
-        res.send({ message: "Reservation not found." });
+        if (result.affectedRows > 0) {
+          res.send({ message: "Reservation deleted successfully." });
+        } else {
+          res.send({ message: "Reservation not found." });
+        }
       }
     }
-  });
+  );
 });

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams, useLocation} from "react-router-dom";
 import axios from "axios"; // Import axios for making HTTP requests
 import "./Confirmation.css";
 import { images } from "../../constants";
@@ -8,7 +8,29 @@ const Confirmation = () => {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
+  const [idtable, setIdtable] = useState();
   const [errors, setErrors] = useState({});
+
+  const [table, setTable] = useState(null);
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await axios.get("http://localhost:3001/booktable" )
+        setTable(response.data[id-1]);
+        setIdtable(response.data.find(table => table.id === Number(id)));
+        // setIdtable(id);
+        // console.log(id);
+        console.log(response.data.find(table => table.id === Number(id)));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetch();
+  }, [id]);
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -47,7 +69,7 @@ const Confirmation = () => {
   };
 
   const handleSubmit = async (event) => {
-    // event.preventDefault();
+    event.preventDefault();
 
     if (validateForm()) {
       try {
@@ -56,6 +78,7 @@ const Confirmation = () => {
           name,
           phoneNumber,
           email,
+          idtable: idtable.id,
         });
 
         // Perform any other actions or redirect to a success page
@@ -82,6 +105,7 @@ const Confirmation = () => {
 
         <div className="confirmation-container">
           <h2>CONFIRMATION FORM</h2>
+          <p >Table ID: {id}</p><br />
           <form onSubmit={handleSubmit}>
             <input
               type="text"

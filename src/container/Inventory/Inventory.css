@@ -1,0 +1,17 @@
+.app__bg #img{
+    width: 25px;
+    border-radius: 5px;
+}
+
+.recent_activity{
+    text-align: right;
+    margin-top: 20px;
+    margin-right: 150px;
+    font-weight: bolder;
+}
+.recent_activity p{
+    font-size:x-large;
+}
+.app__bg table{
+    margin-top: 70px;
+}
