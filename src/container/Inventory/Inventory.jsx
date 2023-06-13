@@ -1,82 +1,76 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { images } from '../../constants';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { images } from "../../constants";
 import "./Inventory.css";
 
-
 const Inventory = () => {
+  const [stock, setStock] = useState([]);
+  const [wastage, setWastage] = useState([]);
+  const [total, setTotal] = useState(0);
+  const role = localStorage.getItem("staff");
+  const [auth, setAuth] = useState(false);
 
-    const [stock,setStock] = useState([]);
-    const [wastage,setWastage] = useState([]);
-    const [total,setTotal] = useState(0);
-    const role = localStorage.getItem("staff");
-    const [auth,setAuth] = useState(false)
-
-    useEffect(() => {
-      const verify = async () => {
-        try {
-          await axios.get("http://localhost:3001/", {
-            withCredentials: true,
-          });
-          setAuth(true);
-        } catch (err) {
-          setAuth(false);
-        }
-      };
-      verify();
-    }, []);
-
-
-    useEffect(()=>{
-        const fetchAll = async ()=>{
-          try{
-            const res = await axios.get("http://localhost:3001/stock");
-            setStock(res.data)
-          }catch(err){
-            console.log(err);
-          }
-        }
-        fetchAll()
-      },[])
-
-    useEffect(()=>{
-        const fetchAll = async ()=>{
-          try{
-            const res = await axios.get("http://localhost:3001/register");
-            setWastage(res.data)
-            calculateTotalCount(res.data)
-            console.log(res.data);
-          }catch(err){
-            console.log(err);
-          }
-        }
-        fetchAll()
-      },[])
-
-      const calculateTotalCount = (data) => {
-        let count = 0;
-        data.forEach(item => {
-          count += item.cost * item.wastage_quantity;
+  useEffect(() => {
+    const verify = async () => {
+      try {
+        await axios.get("http://localhost:3001/", {
+          withCredentials: true,
         });
-        setTotal(count);
-      };
-      
-
-
-    const [activeTab, setActiveTab] = useState("stock");
-
-    const handleTabChange = (tab) => {
-      setActiveTab(tab);
+        setAuth(true);
+      } catch (err) {
+        setAuth(false);
+      }
     };
-  
-    const renderContent = () => {
-      
-      switch (activeTab) {
-        case "stock":
-          return (
-            <div className="app__bg">
-              <table>
-                <thead>
+    verify();
+  }, []);
+
+  useEffect(() => {
+    const fetchAll = async () => {
+      try {
+        const res = await axios.get("http://localhost:3001/stock");
+        setStock(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchAll();
+  }, []);
+
+  useEffect(() => {
+    const fetchAll = async () => {
+      try {
+        const res = await axios.get("http://localhost:3001/register");
+        setWastage(res.data);
+        calculateTotalCount(res.data);
+        console.log(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchAll();
+  }, []);
+
+  const calculateTotalCount = (data) => {
+    let count = 0;
+    data.forEach((item) => {
+      count += item.cost * item.wastage_quantity;
+    });
+    setTotal(count);
+  };
+
+  const [activeTab, setActiveTab] = useState("stock");
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case "stock":
+        return (
+          <div className="app__bg">
+            <table>
+              <thead>
                 <tr>
                   <th>Item Id</th>
                   <th>Item Name</th>
@@ -85,28 +79,34 @@ const Inventory = () => {
                   <th>Available</th>
                   <th>Alert</th>
                 </tr>
-                </thead>
+              </thead>
 
-                <tbody>
-                {stock.map(item =>(
-                <tr key={item.id}>
+              <tbody>
+                {stock.map((item) => (
+                  <tr key={item.id}>
                     <td>{item.itemid}</td>
                     <td>{item.itemname}</td>
                     <td>{item.unit}</td>
                     <td>{item.cost}</td>
                     <td>{item.available}</td>
-                    <td>{item.available < 10 ? <img id='img' src={images.alert} alt="alert" /> : ""}</td>
-                </tr>
+                    <td>
+                      {item.available < 10 ? (
+                        <img id="img" src={images.alert} alt="alert" />
+                      ) : (
+                        ""
+                      )}
+                    </td>
+                  </tr>
                 ))}
-                </tbody>
-              </table> 
-              </div>
-          );
-        case "wastage":
-          return (
-            <div className="app__bg table">
-              <table>
-                <thead>
+              </tbody>
+            </table>
+          </div>
+        );
+      case "wastage":
+        return (
+          <div className="app__bg table">
+            <table>
+              <thead>
                 <tr>
                   <th>Item Id</th>
                   <th>Item Name</th>
@@ -115,33 +115,32 @@ const Inventory = () => {
                   <th>Wastage Quantity</th>
                   <th>Wastage Cost</th>
                 </tr>
-                </thead>
+              </thead>
 
-                <tbody>
-                {wastage.map(item =>(
-                <tr key={item.id}>
+              <tbody>
+                {wastage.map((item) => (
+                  <tr key={item.id}>
                     <td>{item.itemid}</td>
                     <td>{item.itemname}</td>
                     <td>{item.unit}</td>
                     <td>{item.cost}</td>
                     <td>{item.wastage_quantity}</td>
-                    <td>{item.cost * item.wastage_quantity}</td>  
-                </tr>
+                    <td>{item.cost * item.wastage_quantity}</td>
+                  </tr>
                 ))}
-                </tbody>
-              </table>
-              <div className="recent_activity">
-                  <p>Total Wastage: {total}</p>
-              </div>
-              
+              </tbody>
+            </table>
+            <div className="recent_activity">
+              <p>Total Wastage: {total}</p>
             </div>
-          );
-          default:
-          return null;
-        }
+          </div>
+        );
+      default:
+        return null;
     }
+  };
   return (
-    <div className="admin" >
+    <div className="admin">
       <div className="content">{renderContent()}</div>
 
       <div className="sidebar">
@@ -161,7 +160,7 @@ const Inventory = () => {
         </ul>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Inventory
+export default Inventory;

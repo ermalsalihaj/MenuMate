@@ -25,7 +25,6 @@ const Food = () => {
       <section className="menu section">
         <div className="title">
           <h1> MenuMate </h1>
-          {/*<img src={logo} alt="logo" className="logo" />*/}
           <h2>Menu List</h2>
           <div className="underline"></div>
         </div>

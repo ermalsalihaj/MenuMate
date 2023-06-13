@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const BookTable = () => {
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const navigate = useNavigate();
   const [tables, setTable] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
@@ -37,7 +37,6 @@ const BookTable = () => {
   };
 
   const handleFormSubmit = (id) => {
-    // Check if any of the fields are empty
     if (
       selectedDate === "" ||
       selectedTime === "" ||
@@ -47,7 +46,9 @@ const BookTable = () => {
       setIsFormValid(false);
     } else {
       setIsFormValid(true);
-      const belgradeDate = DateTime.fromISO(selectedDate, { zone: 'Europe/Belgrade' }).toISODate();
+      const belgradeDate = DateTime.fromISO(selectedDate, {
+        zone: "Europe/Belgrade",
+      }).toISODate();
       if (filteredTables.length > 0) {
         navigate(`/confirmation/${id}`);
       }
@@ -59,15 +60,16 @@ const BookTable = () => {
       (selectedDate !== "" && !table.date.includes(selectedDate)) ||
       (selectedTime !== "" && table.time !== selectedTime) ||
       (selectedLocation !== "" && table.location !== selectedLocation) ||
-      (selectedTableSize !== "" && table.tablesize !== parseInt(selectedTableSize))
+      (selectedTableSize !== "" &&
+        table.tablesize !== parseInt(selectedTableSize))
     ) {
-      return false; // Exclude the table if it doesn't match any of the selected filters
+      return false;
     }
     return true;
   });
 
   return (
-    <div className="app__bg">
+    <div className="app__bg" style={{ height: "100%" }}>
       <div className="navbar">
         <div className="app__navbar-logo">
           <img src={images.menumate} alt="app logo" />
@@ -144,28 +146,19 @@ const BookTable = () => {
                   tablesize={table.tablesize}
                 />
               </div>
-              
             </div>
           ))
         ) : (
           <p>No tables available matching the selected filters.</p>
         )}
-        {filteredTables.map(table => (
-          // <Link to={`/confirmation/${table.id}`}>confirmation</Link>
-          // isFormValid && (
-          //   <button
-          //     onClick={() => handleFormSubmit(table.id)}
-          //     className="button-light-yellow"
-          //   >
-          //     <p>CONFIRM</p>
-          //   </button>
-          // )
-          <button onClick={() => handleFormSubmit(table.id)}
-          className="button-light-yellow">
-          <p>CONFIRM</p>
-        </button>
+        {filteredTables.map((table) => (
+          <button
+            onClick={() => handleFormSubmit(table.id)}
+            className="button-light-yellow"
+          >
+            <p>CONFIRM</p>
+          </button>
         ))}
-      
 
         {!isFormValid && (
           <p className="error-message">*Please fill in all required fields.</p>

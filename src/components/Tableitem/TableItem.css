@@ -1,28 +1,25 @@
-
-
-
 table {
-    width: 68% ;
-    border-collapse: collapse ;
-    background-color: #EDC446;
-    font-family: "Roboto", sans-serif ;
-  }
+  width: 68%;
+  border-collapse: collapse;
+  background-color: #edc446;
+  font-family: "Roboto", sans-serif;
+}
 
-  th{
-    background-color: #B98319 !important;
-  }
+th {
+  background-color: #b98319 !important;
+}
 
-  th,
-  td {
-    padding: 8px;
-    text-align: left;
-    color: black;
-  }
-  
-  tr:nth-child(even) {
-    background-color: #D39C38 !important;
-  }
-  
-  tr:hover {
-    background-color: #E2BF61 !important;
-  }
+th,
+td {
+  padding: 8px;
+  text-align: left;
+  color: black;
+}
+
+tr:nth-child(even) {
+  background-color: #d39c38 !important;
+}
+
+tr:hover {
+  background-color: #e2bf61 !important;
+}

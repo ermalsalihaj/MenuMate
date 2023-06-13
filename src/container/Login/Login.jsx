@@ -1,8 +1,8 @@
 import "./Login.css";
 import Axios from "axios";
 import React, { useState } from "react";
-import { SubHeading } from '../../components';
-import { images } from '../../constants';
+import { SubHeading } from "../../components";
+import { images } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -38,7 +38,7 @@ function Login() {
     Axios.post("http://localhost:3001/login", {
       username: username,
       password: password,
-      role:role,
+      role: role,
     }).then((response) => {
       if (response.data.message) {
         setLoginStatus(response.data.message);
@@ -46,11 +46,11 @@ function Login() {
         setLoginStatus("Login was successful");
         localStorage.setItem("role", response.data.role);
 
-        if(response.data.role === "staff"){
-          navigate("/inventory")
+        if (response.data.role === "staff") {
+          navigate("/inventory");
           console.log(response.data.role);
         }
-        
+
         navigate("/");
       }
     });
@@ -60,8 +60,7 @@ function Login() {
   };
 
   return (
-    <div className="container app__bg " id="login" >
-      
+    <div className="container app__bg " id="login">
       {showRegisterForm ? (
         <div className="registerForm">
           <form action="">
@@ -155,16 +154,14 @@ function Login() {
             <p>
               Don't have an account?{" "}
               <b>
-                <a
-                  href="#"
-                  
-                  onClick={toggleRegisterForm}
-                >
+                <a href="#" className="ahref" onClick={toggleRegisterForm}>
                   Register here
                 </a>
               </b>
             </p>
-            <p className="statusMessage">{loginStatus}</p>
+            <p style={{ color: "red" }} className="statusMessage">
+              {loginStatus}
+            </p>
           </form>
         </div>
       )}

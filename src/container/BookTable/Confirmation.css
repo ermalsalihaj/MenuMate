@@ -30,21 +30,16 @@ input[type="submit"] {
   font-weight: bold;
 }
 .confirmation-btn {
-  /* background-color: var(--color-golden);
-  color: black;
-  padding: 10px 20px;
-  text-decoration: none;
-  cursor: pointer; */
   padding: 3.2% 18px;
-    background-color: var(--color-golden);
-    color: black;
-    margin: 2% 0;
-    font-family: "Roboto";
-    font-size: 1.1rem;
-    border: none;
-    border-radius: 5px;
-    text-align: center;
-    cursor: pointer;
+  background-color: var(--color-golden);
+  color: black;
+  margin: 2% 0;
+  font-family: "Roboto";
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
 }
 
 .error-message {

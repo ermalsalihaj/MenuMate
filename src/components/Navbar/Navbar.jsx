@@ -67,14 +67,14 @@ const Navbar = () => {
           {" "}
           <a href="#contact">Contact</a>
         </li>
-        {auth && role === "admin" &&  (
+        {auth && role === "admin" && (
           <li>
             <Link to="/admin" className="p__opensans">
               Dashboard
             </Link>
           </li>
         )}
-      </ul> 
+      </ul>
 
       <div className="app__navbar-login">
         {auth ? (
@@ -90,21 +90,21 @@ const Navbar = () => {
         )}
 
         <li>
-          {auth && role === "user" &&  (
+          {auth && role === "user" && (
             <Link to="/booktable" className="p__opensans">
               Book Table
             </Link>
           )}
         </li>
         <li>
-          {auth && role === "admin" &&  (
+          {auth && role === "admin" && (
             <Link to="/addTable" className="p__opensans">
               Add Table
             </Link>
           )}
         </li>
         <li>
-          {auth && role === "staff" &&  (
+          {auth && role === "staff" && (
             <Link to="/inventory" className="p__opensans">
               Inventory
             </Link>

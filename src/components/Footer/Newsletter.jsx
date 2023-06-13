@@ -4,7 +4,7 @@ import SubHeading from '../SubHeading/SubHeading';
 import './Newsletter.css';
 
 const Newsletter = () => (
-  <div className="appnewsletter">
+  <div className="appnewsletter" style={{ marginTop: '70px'}}>
     <div className="appnewsletter-heading">
       <SubHeading title="Newsletter" />
       <h1 className="headtextcormorant">Subscribe To Our Newsletter</h1>

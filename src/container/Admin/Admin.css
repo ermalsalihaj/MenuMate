@@ -1,4 +1,4 @@
-*{
+* {
   margin: 0;
   padding: 0;
 }
@@ -15,7 +15,8 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-}.admin.recent-activity ul li{
+}
+.admin.recent-activity ul li {
   font-size: 25px;
 }
 .admin button {
@@ -37,7 +38,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 200px; /* Adjust the height as needed */
+  height: 200px;
 }
 
 .admin .buttons {
@@ -80,9 +81,9 @@ body {
 .admin .recent-activity li {
   margin-bottom: 10px;
 }
-.admin h2{
+.admin h2 {
   font-family: var(--font-base);
-color: #EDC446;
+  color: #edc446;
 }
 
 .admin .home-box::before {
@@ -92,7 +93,7 @@ color: #EDC446;
   left: -10px;
   right: -10px;
   bottom: -10px;
-  background: #EDC446;
+  background: #edc446;
   z-index: -1;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -100,14 +101,14 @@ color: #EDC446;
 
 .admin .home-box:hover::before {
   opacity: 1;
-  z-index: 0; /* Update this value */
+  z-index: 0;
 }
 
 .admin.home-box h2,
 .admin.home-box p {
   color: #333;
   position: relative;
-  z-index: 1; /* Add this line */
+  z-index: 1;
 }
 
 .admin.home-box p {
@@ -123,7 +124,7 @@ color: #EDC446;
   left: 0;
   width: 100%;
   height: 10px;
-  background-color: #EDC446;
+  background-color: #edc446;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -165,7 +166,7 @@ color: #EDC446;
 }
 
 .admin li.active {
-  background-color: #EDC446;
+  background-color: #edc446;
   color: #fff;
 }
 

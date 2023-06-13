@@ -1,9 +1,9 @@
-import React from 'react';
-import { FiFacebook, FiTwitter, FiInstagram } from 'react-icons/fi';
+import React from "react";
+import { FiFacebook, FiTwitter, FiInstagram } from "react-icons/fi";
 
-import { FooterOverlay, Newsletter } from '../../components';
-import { images } from '../../constants';
-import './Footer.css';
+import { FooterOverlay, Newsletter } from "../../components";
+import { images } from "../../constants";
+import "./Footer.css";
 
 const Footer = () => (
   <div className="appfooter sectionpadding" id="login">
@@ -19,9 +19,15 @@ const Footer = () => (
       </div>
 
       <div className="appfooter-links_logo">
-       {/* <img src={images.gericht} alt="footer_logo" />*/}
-        <p className="popensans">&quot;The best way to find yourself is to lose yourself in the service of others.&quot;</p>
-        <img src={images.spoon} className="spoonimg" style={{ marginTop: 15 }} />
+        <p className="popensans">
+          &quot;The best way to find yourself is to lose yourself in the service
+          of others.&quot;
+        </p>
+        <img
+          src={images.spoon}
+          className="spoonimg"
+          style={{ marginTop: 15 }}
+        />
         <div className="appfooter-links_icons">
           <FiFacebook />
           <FiTwitter />
@@ -41,7 +47,6 @@ const Footer = () => (
     <div className="footercopyright">
       <p className="popensans">2023 MenuMate. All Rights reserved.</p>
     </div>
-
   </div>
 );
 

@@ -44,11 +44,14 @@
   align-items: center;
   font-family: var(--font-base);
   font-weight: bolder;
-  font-size: large;
-  background: #428059;
+  font-size: 20px;
+  background: black;
+  color: white;
   width: 100%;
+  cursor: pointer;
   display: flex;
   justify-content: center;
+  border-radius: 5px;
 }
 
 .table-container .form-inline {

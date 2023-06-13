@@ -40,6 +40,8 @@ con.connect((err) => {
 con.on("error", (err) => {
   console.error("Database error:", err);
 });
+
+/////////////////////  USERS  //////////////////////////////////
 app.get("/users", (req, res) => {
   con.query("SELECT * FROM users", (err, result) => {
     if (err) {
@@ -91,7 +93,8 @@ app.delete("/delete/:id", (req, res) => {
   });
 });
 
-// Get database
+/////////////////////  MENU  //////////////////////////////////
+
 app.get("/menu", (req, res) => {
   const q = "SELECT * FROM menu";
   con.query(q, (err, data) => {
@@ -100,7 +103,6 @@ app.get("/menu", (req, res) => {
   });
 });
 
-// Insert database
 app.post("/menu", (req, res) => {
   const q = "Insert into menu (`title`,`desc`,`price`,`cover`) VALUES(?)";
   const VALUES = [
@@ -116,7 +118,6 @@ app.post("/menu", (req, res) => {
   });
 });
 
-// Delete database
 app.delete("/menu/:idmenu", (req, res) => {
   const idmenu = req.params.idmenu;
   const q = "DELETE FROM menu where idmenu = ?";
@@ -127,7 +128,6 @@ app.delete("/menu/:idmenu", (req, res) => {
   });
 });
 
-// Update database
 app.put("/viewMenu/:idmenu", (req, res) => {
   const idmenu = req.params.idmenu;
   const q =
@@ -148,7 +148,6 @@ app.put("/viewMenu/:idmenu", (req, res) => {
   });
 });
 
-// Get database
 app.get("/drinks", (req, res) => {
   const q = "SELECT * FROM drinks";
   con.query(q, (err, data) => {
@@ -157,7 +156,6 @@ app.get("/drinks", (req, res) => {
   });
 });
 
-// Insert database
 app.post("/drinks", (req, res) => {
   const q =
     "Insert into drinks (`name`,`ingredients`,`price`,`cover`) VALUES(?)";
@@ -174,7 +172,6 @@ app.post("/drinks", (req, res) => {
   });
 });
 
-// Delete database
 app.delete("/drinks/:iddrinks", (req, res) => {
   const iddrinks = req.params.iddrinks;
   const q = "DELETE FROM drinks where iddrinks = ?";
@@ -185,7 +182,6 @@ app.delete("/drinks/:iddrinks", (req, res) => {
   });
 });
 
-// Update database
 app.put("/viewMenu/:iddrinks", (req, res) => {
   const iddrinks = req.params.iddrinks;
   const q =
@@ -206,6 +202,8 @@ app.put("/viewMenu/:iddrinks", (req, res) => {
   });
 });
 
+/////////////////////  INVENTORY  //////////////////////////////////
+
 app.get("/stock", (req, res) => {
   const q = "SELECT * FROM stock";
   con.query(q, (err, data) => {
@@ -215,8 +213,7 @@ app.get("/stock", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  const q =
-    "SELECT * FROM stock s inner join wastage w on s.id=w.idstock ";
+  const q = "SELECT * FROM stock s inner join wastage w on s.id=w.idstock ";
   con.query(q, (err, data) => {
     if (err) return res.json(err);
     return res.json(data);
@@ -242,144 +239,8 @@ app.post("/register", (req, res) => {
   );
 });
 
-app.post("/login", (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
+/////////////////////  RESERVATIONS  //////////////////////////////////
 
-  con.query(
-    "SELECT * FROM users WHERE username = ? AND password = ?",
-    [username, password],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(500).send({ message: "An error occurred." });
-      } else {
-        if (result.length > 0) {
-          const token = jwt.sign(
-            { idusers: result[0].id, role: result[0].role },
-            "jwtkey"
-          );
-          const { password, ...others } = result[0];
-          const role = result[0].role;
-
-          if (result[0].role === "admin") {
-            console.log("Admin logged in:", result[0].username);
-          }
-
-          if (result[0].role === "user") {
-            console.log("User logged in:", result[0].username);
-          }
-
-          res
-            .cookie("accessToken", token, {
-              httpOnly: true,
-            })
-            .status(200)
-            .json({ ...others, role });
-        } else {
-          res.send({ message: "Wrong username or password." });
-        }
-      }
-    }
-  );
-});
-
-app.post("/logout", (req, res) => {
-  res.clearCookie("accessToken").status(200).json("User has been logged out");
-});
-
-const verifyUser = (req, res, next) => {
-  const token = req.cookies.accessToken;
-
-  if (!token) {
-    return res.status(401).json("Token not found!");
-  } else {
-    jwt.verify(token, "jwtkey", (err, decoded) => {
-      if (err) {
-        return res.status(401).json("Authentication Error");
-      } else {
-        req.username = decoded.username;
-        req.role = decoded.role;
-        next();
-      }
-    });
-  }
-};
-app.get("/admin", verifyUser, (req, res) => {
-  if (req.role === "admin") {
-    res.status(200).json({ message: "Access granted. Logged in as Admin." });
-  } else {
-    res.status(403).json({ message: "Access denied. Admin role required." });
-  }
-});
-app.get("/", verifyUser, (req, res) => {
-  return res.json({ username: req.username });
-});
-app.listen(3001, () => {
-  console.log("Running on port 3001...");
-});
-
-/////////////////////////////////////////////////////////////////////////
-// Get database
-app.get("/booktable", (req, res) => {
-  const q = "SELECT * FROM booktable";
-  con.query(q, (err, data) => {
-    if (err) return res.json(err);
-    return res.json(data);
-  });
-});
-
-// Insert database
-app.post("/booktable", (req, res) => {
-  const q =
-    "Insert into booktable (`date`,`time`,`location`,`tablesize`) VALUES(?)";
-  const VALUES = [
-    DateTime.fromISO(req.body.date, { zone: "Europe/Belgrade" })
-      .plus({ days: 1 })
-      .toISODate(),
-    req.body.time,
-    req.body.location,
-    req.body.tablesize,
-  ];
-
-  con.query(q, [VALUES], (err, data) => {
-    if (err) return res.json(err);
-    return res.json("Table created successfully.");
-  });
-});
-
-// Delete database
-app.delete("/booktable/:id", (req, res) => {
-  const id = req.params.id;
-  const q = "DELETE FROM booktable where id = ?";
-
-  con.query(q, [id], (err, data) => {
-    if (err) return res.json(err);
-    return res.json("Table deleted successfully.");
-  });
-});
-
-app.put("/bookTable/:id", (req, res) => {
-  const id = req.params.id;
-  const q =
-    "UPDATE booktable SET `date` = ?, `time` = ?, `location` = ?, `tablesize` = ? WHERE id = ? ";
-
-  const values = [
-    DateTime.fromISO(req.body.date, { zone: "Europe/Belgrade" })
-      .plus({ days: 1 })
-      .toISODate(),
-    req.body.time,
-    req.body.location,
-    req.body.tablesize,
-  ];
-
-  values.push(id);
-
-  con.query(q, values, (err, data) => {
-    if (err) return res.json(err);
-    return res.json("Table updated successfully.");
-  });
-});
 app.get("/reservations", (req, res) => {
   const id = req.params.id;
   con.query("SELECT * FROM reservations", (err, result) => {
@@ -471,4 +332,143 @@ app.delete("/reservations/:id", (req, res) => {
       }
     }
   );
+});
+
+/////////////////////  TABLE BOOKING  //////////////////////////////////
+
+app.get("/booktable", (req, res) => {
+  const q = "SELECT * FROM booktable";
+  con.query(q, (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data);
+  });
+});
+
+app.post("/booktable", (req, res) => {
+  const q =
+    "Insert into booktable (`date`,`time`,`location`,`tablesize`) VALUES(?)";
+  const VALUES = [
+    DateTime.fromISO(req.body.date, { zone: "Europe/Belgrade" })
+      .plus({ days: 1 })
+      .toISODate(),
+    req.body.time,
+    req.body.location,
+    req.body.tablesize,
+  ];
+
+  con.query(q, [VALUES], (err, data) => {
+    if (err) return res.json(err);
+    return res.json("Table created successfully.");
+  });
+});
+
+app.delete("/booktable/:id", (req, res) => {
+  const id = req.params.id;
+  const q = "DELETE FROM booktable where id = ?";
+
+  con.query(q, [id], (err, data) => {
+    if (err) return res.json(err);
+    return res.json("Table deleted successfully.");
+  });
+});
+
+app.put("/bookTable/:id", (req, res) => {
+  const id = req.params.id;
+  const q =
+    "UPDATE booktable SET `date` = ?, `time` = ?, `location` = ?, `tablesize` = ? WHERE id = ? ";
+
+  const values = [
+    DateTime.fromISO(req.body.date, { zone: "Europe/Belgrade" })
+      .plus({ days: 1 })
+      .toISODate(),
+    req.body.time,
+    req.body.location,
+    req.body.tablesize,
+  ];
+
+  values.push(id);
+
+  con.query(q, values, (err, data) => {
+    if (err) return res.json(err);
+    return res.json("Table updated successfully.");
+  });
+});
+
+/////////////////////  AUTHENTICATION LOG IN/LOG OUT  //////////////////////////////////
+
+app.post("/login", (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  con.query(
+    "SELECT * FROM users WHERE username = ? AND password = ?",
+    [username, password],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send({ message: "An error occurred." });
+      } else {
+        if (result.length > 0) {
+          const token = jwt.sign(
+            { idusers: result[0].id, role: result[0].role },
+            "jwtkey"
+          );
+          const { password, ...others } = result[0];
+          const role = result[0].role;
+
+          if (result[0].role === "admin") {
+            console.log("Admin logged in:", result[0].username);
+          }
+
+          if (result[0].role === "user") {
+            console.log("User logged in:", result[0].username);
+          }
+
+          res
+            .cookie("accessToken", token, {
+              httpOnly: true,
+            })
+            .status(200)
+            .json({ ...others, role });
+        } else {
+          res.send({ message: "Wrong username or password." });
+        }
+      }
+    }
+  );
+});
+
+app.post("/logout", (req, res) => {
+  res.clearCookie("accessToken").status(200).json("User has been logged out");
+});
+
+const verifyUser = (req, res, next) => {
+  const token = req.cookies.accessToken;
+
+  if (!token) {
+    return res.status(401).json("Token not found!");
+  } else {
+    jwt.verify(token, "jwtkey", (err, decoded) => {
+      if (err) {
+        return res.status(401).json("Authentication Error");
+      } else {
+        req.username = decoded.username;
+        req.role = decoded.role;
+        next();
+      }
+    });
+  }
+};
+app.get("/admin", verifyUser, (req, res) => {
+  if (req.role === "admin") {
+    res.status(200).json({ message: "Access granted. Logged in as Admin." });
+  } else {
+    res.status(403).json({ message: "Access denied. Admin role required." });
+  }
+});
+app.get("/", verifyUser, (req, res) => {
+  return res.json({ username: req.username });
+});
+app.listen(3001, () => {
+  console.log("Running on port 3001...");
 });

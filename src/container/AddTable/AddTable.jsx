@@ -17,7 +17,9 @@ const AddTable = () => {
 
   const handleChange = (e) => {
     if (e.target.name === "date") {
-      const selectedDate = DateTime.fromFormat(e.target.value, "yyyy-MM-dd", { zone: 'Europe/Belgrade' }).toISODate();
+      const selectedDate = DateTime.fromFormat(e.target.value, "yyyy-MM-dd", {
+        zone: "Europe/Belgrade",
+      }).toISODate();
       const today = DateTime.now().toISODate();
 
       if (selectedDate < today) {
@@ -32,7 +34,6 @@ const AddTable = () => {
   const handleClick = async (e) => {
     e.preventDefault();
 
-   
     if (
       table.date === "" ||
       table.time === "" ||
@@ -40,16 +41,15 @@ const AddTable = () => {
       table.tablesize === ""
     ) {
       alert("Please fill in all the fields.");
-      return; 
+      return;
     }
 
-    
     const timeRegex = /^(9|10|11)AM|(12|1|2|3|4|5)PM$/;
     if (!timeRegex.test(table.time)) {
       alert(
         "Please enter a valid time in the format: 9AM, 10AM, 11AM, 12PM, 1PM, 2PM, 3PM, 4PM, 5PM"
       );
-      return; // Prevent form submission
+      return; 
     }
 
     try {
@@ -68,11 +68,7 @@ const AddTable = () => {
         </div>
 
         <div className="app__navbar-spoon">
-          <img
-            src={images.spoon}
-            alt="about_spoon"
-            className="spoon__img"
-          />
+          <img src={images.spoon} alt="about_spoon" className="spoon__img" />
         </div>
       </div>
 
@@ -80,7 +76,7 @@ const AddTable = () => {
         <div className="table-container">
           <h2 className="app__specialMenu-menu_heading">Add new Table</h2>
           <input
-            style= {{marginLeft: "-1px"}}
+            style={{ marginLeft: "-1px" }}
             type="date"
             placeholder="Date"
             onChange={handleChange}
@@ -95,7 +91,7 @@ const AddTable = () => {
             value={table.time}
           />
           <select
-            style= {{marginLeft: "-1px"}}
+            style={{ marginLeft: "-1px" }}
             className="input-one"
             value={table.location}
             onChange={handleChange}

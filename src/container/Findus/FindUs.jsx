@@ -27,6 +27,9 @@ const FindUs = () => (
         type="button"
         className="custom__button"
         style={{ marginTop: "2rem" }}
+        onClick={() =>
+          (window.location.href = "https://goo.gl/maps/4cx9LF6hdMbLy8TD9")
+        }
       >
         Visit Us
       </button>

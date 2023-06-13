@@ -13,14 +13,12 @@ const TableItem = ({ date, time, location, tablesize }) => (
       </tr>
     </thead>
     <tbody>
-
-        <tr >
-          <td>{date}</td>
-          <td>{time}</td>
-          <td>{location}</td>
-          <td>{tablesize}</td>
-        </tr>
-
+      <tr>
+        <td>{date}</td>
+        <td>{time}</td>
+        <td>{location}</td>
+        <td>{tablesize}</td>
+      </tr>
     </tbody>
   </table>
 );

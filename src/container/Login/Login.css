@@ -45,17 +45,17 @@ label {
   border: none;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
   font-size: 16px;
-  color: #2c53d4;
+  color: green;
 }
 .registerForm p,
-.loginForm p{
- color:white; 
+.loginForm p {
+  color: white;
 }
 .button {
   width: 100%;
   padding: 10px;
   margin-top: 20px;
-  background-color: #2c53d4;
+  background-color: var(--color-golden);
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -68,19 +68,19 @@ label {
 }
 
 .button:hover {
-  background-color: #1c386d;
+  background-color: green;
 }
 
-a {
-  color: #2c53d4;
-  font-size: 14px;
+.ahref a {
+  color: var(--color-golden);
+  font-size: 20px;
   text-decoration: none;
   margin-top: 20px;
   transition: color 0.3s ease-in-out;
 }
 
 a:hover {
-  color: #1c386d;
+  color: green;
 }
 
 .statusMessage {

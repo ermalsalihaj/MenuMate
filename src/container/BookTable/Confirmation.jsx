@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams, useLocation} from "react-router-dom";
-import axios from "axios"; // Import axios for making HTTP requests
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
+import axios from "axios";
 import "./Confirmation.css";
 import { images } from "../../constants";
 
@@ -18,12 +18,11 @@ const Confirmation = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/booktable" )
-        setTable(response.data[id-1]);
-        setIdtable(response.data.find(table => table.id === Number(id)));
-        // setIdtable(id);
-        // console.log(id);
-        console.log(response.data.find(table => table.id === Number(id)));
+        const response = await axios.get("http://localhost:3001/booktable");
+        setTable(response.data[id - 1]);
+        setIdtable(response.data.find((table) => table.id === Number(id)));
+
+        console.log(response.data.find((table) => table.id === Number(id)));
       } catch (error) {
         console.error(error);
       }
@@ -73,7 +72,6 @@ const Confirmation = () => {
 
     if (validateForm()) {
       try {
-        // Send a POST request to create a reservation
         await axios.post("http://localhost:3001/reservations", {
           name,
           phoneNumber,
@@ -81,9 +79,7 @@ const Confirmation = () => {
           idtable: idtable.id,
         });
 
-        // Perform any other actions or redirect to a success page
         console.log("Reservation created successfully.");
-
       } catch (error) {
         console.error("An error occurred:", error);
       }
@@ -105,7 +101,8 @@ const Confirmation = () => {
 
         <div className="confirmation-container">
           <h2>CONFIRMATION FORM</h2>
-          <p >Table ID: {id}</p><br />
+          <p>Table ID: {id}</p>
+          <br />
           <form onSubmit={handleSubmit}>
             <input
               type="text"

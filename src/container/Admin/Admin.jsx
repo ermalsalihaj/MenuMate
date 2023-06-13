@@ -31,22 +31,27 @@ const Admin = () => {
     fetchConfirmations();
   }, []);
   const handleCondDelete = async (id) => {
-    const confDelete = confirmations.find((confirm) => confirmations.idreservations === deletedConfId);
+    const confDelete = confirmations.find(
+      (confirm) => confirmations.idreservations === deletedConfId
+    );
     if (confDelete) {
-      addActivity(`Reservation with ID: ${confDelete.idreservations} is deleted`);
+      addActivity(
+        `Reservation with ID: ${confDelete.idreservations} is deleted`
+      );
 
       try {
         await axios.delete(`http://localhost:3001/reservations/${id}`);
-        setConfirm(confirmations.filter((confirm) => confirmations.idreservations !== id));
+        setConfirm(
+          confirmations.filter((confirm) => confirmations.idreservations !== id)
+        );
       } catch (error) {
         console.error(error);
       }
     }
   };
-  const handleDeleteConf= (id) => {
+  const handleDeleteConf = (id) => {
     setDeletedConfId(id);
   };
-  
 
   useEffect(() => {
     const fetchAllMeals = async () => {
@@ -91,7 +96,6 @@ const Admin = () => {
         setUsers(
           users.map((user) => (user.id === editedUser.id ? editedUser : user))
         );
-        //reset edited user
 
         setEditedUser({});
       })
@@ -380,12 +384,6 @@ const Admin = () => {
                         >
                           Delete
                         </p>
-                        {/* <Link
-                          className="update-btn"
-                          to={`/update/${}`}
-                        >
-                          <p className="update">Update</p>
-                        </Link> */}
                       </div>
                     </td>
                   </tr>
