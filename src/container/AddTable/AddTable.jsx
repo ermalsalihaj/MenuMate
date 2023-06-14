@@ -1,11 +1,28 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { images } from "../../constants";
 import { DateTime } from "luxon";
 import "./AddTable.css";
 
 const AddTable = () => {
+  const role = localStorage.getItem("role");
+  const [auth, setAuth] = useState(false);
+
+  useEffect(() => {
+    const verify = async () => {
+      try {
+        await axios.get("http://localhost:3001/", {
+          withCredentials: true,
+        });
+        setAuth(true);
+      } catch (err) {
+        setAuth(false);
+      }
+    };
+    verify();
+  }, []);
+
   const [table, setTable] = useState({
     date: "",
     time: "",
@@ -49,7 +66,7 @@ const AddTable = () => {
       alert(
         "Please enter a valid time in the format: 9AM, 10AM, 11AM, 12PM, 1PM, 2PM, 3PM, 4PM, 5PM"
       );
-      return; 
+      return;
     }
 
     try {
@@ -62,59 +79,71 @@ const AddTable = () => {
 
   return (
     <div className="app__bg">
-      <div className="navbar">
-        <div className="app__navbar-logo">
-          <img src={images.menumate} alt="app logo" />
-        </div>
+      {auth && role === "admin" ? (
+        <div className="app__bg">
+          <div className="navbar">
+            <div className="app__navbar-logo">
+              <img src={images.menumate} alt="app logo" />
+            </div>
 
-        <div className="app__navbar-spoon">
-          <img src={images.spoon} alt="about_spoon" className="spoon__img" />
-        </div>
-      </div>
+            <div className="app__navbar-spoon">
+              <img
+                src={images.spoon}
+                alt="about_spoon"
+                className="spoon__img"
+              />
+            </div>
+          </div>
 
-      <div className="flex__center section__padding">
-        <div className="table-container">
-          <h2 className="app__specialMenu-menu_heading">Add new Table</h2>
-          <input
-            style={{ marginLeft: "-1px" }}
-            type="date"
-            placeholder="Date"
-            onChange={handleChange}
-            name="date"
-            value={table.date}
-          />
-          <input
-            type="text"
-            placeholder="Time (9AM to 5PM)"
-            onChange={handleChange}
-            name="time"
-            value={table.time}
-          />
-          <select
-            style={{ marginLeft: "-1px" }}
-            className="input-one"
-            value={table.location}
-            onChange={handleChange}
-            name="location"
-          >
-            <option value="">Choose a Location</option>
-            <option value="any location">Any Location</option>
-            <option value="inside">Inside</option>
-            <option value="outside">Outside</option>
-          </select>
-          <input
-            type="number"
-            placeholder="Table Size (7 max)"
-            onChange={handleChange}
-            name="tablesize"
-            value={table.tablesize}
-          />
+          <div className="flex__center section__padding">
+            <div className="table-container">
+              <h2 className="app__specialMenu-menu_heading">Add new Table</h2>
+              <input
+                style={{ marginLeft: "-1px" }}
+                type="date"
+                placeholder="Date"
+                onChange={handleChange}
+                name="date"
+                value={table.date}
+              />
+              <input
+                type="text"
+                placeholder="Time (9AM to 5PM)"
+                onChange={handleChange}
+                name="time"
+                value={table.time}
+              />
+              <select
+                style={{ marginLeft: "-1px" }}
+                className="input-one"
+                value={table.location}
+                onChange={handleChange}
+                name="location"
+              >
+                <option value="">Choose a Location</option>
+                <option value="any location">Any Location</option>
+                <option value="inside">Inside</option>
+                <option value="outside">Outside</option>
+              </select>
+              <input
+                type="number"
+                placeholder="Table Size (7 max)"
+                onChange={handleChange}
+                name="tablesize"
+                value={table.tablesize}
+              />
 
-          <button className="formButton" onClick={handleClick}>
-            Add
-          </button>
+              <button className="formButton" onClick={handleClick}>
+                Add
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div>
+          <h1>You Do Not Have Access To This Page</h1>
+        </div>
+      )}
     </div>
   );
 };

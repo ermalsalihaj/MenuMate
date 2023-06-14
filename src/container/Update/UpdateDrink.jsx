@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import "./Update.css";
 
-const AddDrink = () => {
+const UpdateDrink = () => {
   const role = localStorage.getItem("role");
   const [auth, setAuth] = useState(false);
 
@@ -20,73 +21,91 @@ const AddDrink = () => {
     verify();
   }, []);
 
-  const [drink, setDrink] = useState({
+  const [drink, setdrink] = useState({
     name: "",
     ingredients: "",
-    cover: "",
     price: "",
+    cover: "",
   });
-  const [formError, setFormError] = useState(false);
+
   const navigate = useNavigate();
+  const location = useLocation();
+  const [meal, setMeal] = useState(null);
+
+  const { iddrinks } = useParams();
+
+  const drinksId = location.pathname.split("/")[2];
+
+  useEffect(() => {
+    const fetchMeal = async () => {
+      try {
+        const response = await axios.get("http://localhost:3001/drinks/");
+        setMeal(response.data[iddrinks - 1]);
+        console.log(response.data[iddrinks - 1]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchMeal();
+  }, []);
+
+  useEffect(() => {
+    if (meal) {
+      setdrink(meal);
+      console.log(meal);
+    }
+  }, [meal]);
 
   const handleChange = (e) => {
-    setDrink((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setdrink((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleClick = async (e) => {
     e.preventDefault();
-
-    if (
-      !drink.name.trim() ||
-      !drink.ingredients.trim() ||
-      !drink.cover.trim() ||
-      !drink.price.trim()
-    ) {
-      setFormError(true);
-      return;
-    }
-
     try {
-      await axios.post("http://localhost:3001/drinks", drink);
+      await axios.put("http://localhost:3001/drinks/" + drinksId, drink);
       navigate("/viewMenu");
+      console.log(drink);
     } catch (err) {
       console.log(err);
     }
   };
 
   return (
-    <div className="app__bg app__specialMenu flex__center section__padding">
+    <div className=" app__specialMenu flex__center section__padding  ">
       {auth && role === "admin" ? (
-        <div className="form-add">
-          <h2 className="app__specialMenu-menu_heading">Add new drink</h2>
+        <div className="form-update">
+          <h2 className="app__specialMenu-menu_heading">Update Drink</h2>
+
           <input
             type="text"
             placeholder="name"
             onChange={handleChange}
             name="name"
+            value={drink.name}
           />
           <input
             type="text"
             placeholder="ingredients"
             onChange={handleChange}
             name="ingredients"
+            value={drink.ingredients}
           />
           <input
             type="text"
-            placeholder="Price"
+            placeholder="price"
             onChange={handleChange}
             name="price"
+            value={drink.price}
           />
           <input
             type="text"
-            placeholder="Cover"
+            placeholder="cover"
             onChange={handleChange}
             name="cover"
+            value={drink.cover}
           />
-
-          {formError && (
-            <p className="error-message">Please fill in all fields.</p>
-          )}
 
           <button className="formButton" onClick={handleClick}>
             Add
@@ -100,5 +119,4 @@ const AddDrink = () => {
     </div>
   );
 };
-
-export default AddDrink;
+export default UpdateDrink;

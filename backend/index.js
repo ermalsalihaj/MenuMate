@@ -136,10 +136,10 @@ app.get("/menu", (req, res) => {
 });
 
 app.post("/menu", (req, res) => {
-  const q = "Insert into menu (`title`,`desc`,`price`,`cover`) VALUES(?)";
+  const q = "Insert into menu (`title`,`description`,`price`,`cover`) VALUES(?)";
   const VALUES = [
     req.body.title,
-    req.body.desc,
+    req.body.description,
     req.body.price,
     req.body.cover,
   ];
@@ -163,11 +163,11 @@ app.delete("/menu/:idmenu", (req, res) => {
 app.put("/viewMenu/:idmenu", (req, res) => {
   const idmenu = req.params.idmenu;
   const q =
-    "UPDATE menu SET `title` = ?, `desc` = ?, `price` = ?, `cover` = ? WHERE idmenu = ? ";
+    "UPDATE menu SET `title` = ?, `description` = ?, `price` = ?, `cover` = ? WHERE idmenu = ? ";
 
   const values = [
     req.body.title,
-    req.body.desc,
+    req.body.description,
     req.body.price,
     req.body.cover,
   ];
@@ -214,19 +214,18 @@ app.delete("/drinks/:iddrinks", (req, res) => {
   });
 });
 
-app.put("/viewMenu/:iddrinks", (req, res) => {
+app.put("/drinks/:iddrinks", (req, res) => {
   const iddrinks = req.params.iddrinks;
   const q =
-    "UPDATE menu SET `name` = ?, `ingredients` = ?, `price` = ?, `cover` = ? WHERE iddrinks = ? ";
+    "UPDATE drinks SET `name` = ?, `ingredients` = ?, `price` = ?, `cover` = ? WHERE iddrinks = ? ";
 
   const values = [
     req.body.name,
     req.body.ingredients,
     req.body.price,
     req.body.cover,
+    iddrinks,
   ];
-
-  values.push(iddrinks);
 
   con.query(q, values, (err, data) => {
     if (err) return res.json(err);
@@ -387,7 +386,7 @@ app.delete("/booktable/:id", (req, res) => {
   });
 });
 
-app.put("/bookTable/:id", (req, res) => {
+app.put("/booktable/:id", (req, res) => {
   const id = req.params.id;
   const q =
     "UPDATE booktable SET `date` = ?, `time` = ?, `location` = ?, `tablesize` = ? WHERE id = ? ";

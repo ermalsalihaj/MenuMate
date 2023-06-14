@@ -75,7 +75,6 @@ const ViewMenu = () => {
           <SubHeading title="Our Menu" />
           <h1 className="headtext__cormorant">Where every flavor </h1>
           <h1 className="headtext__cormorant">tells a story</h1>
-          {/* <img src={images.drink1} alt="chef_image" /> */}
         </div>
       </div>
 
@@ -173,6 +172,12 @@ const ViewMenu = () => {
                       >
                         Delete
                       </p>
+                      <Link
+                        className="update-btn"
+                        to={`/updateDrink/${drink.iddrinks}`}
+                      >
+                        <p className="update"> Update</p>
+                      </Link>
                     </div>
                   )}
                 </div>

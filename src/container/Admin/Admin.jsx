@@ -7,7 +7,6 @@ const Admin = () => {
   const [users, setUsers] = useState([]);
   const [editedUser, setEditedUser] = useState({});
   const [deletedUserId, setDeletedUserId] = useState(null);
-  const [auth, setAuth] = useState(false);
   const [name, setName] = useState("");
   const [tables, setTable] = useState();
   const [confirm, setConfirm] = useState();
@@ -18,6 +17,24 @@ const Admin = () => {
   const [drinks, setDrinks] = useState([]);
   const [editedDrink, setEditedDrink] = useState({});
   const [deletedDrinkId, setDeletedDrinkId] = useState(null);
+
+  const role = localStorage.getItem("role");
+  const [auth, setAuth] = useState(false);
+
+  ///////////////////////AUTH//////////////////////////////
+  useEffect(() => {
+    const verify = async () => {
+      try {
+        await axios.get("http://localhost:3001/", {
+          withCredentials: true,
+        });
+        setAuth(true);
+      } catch (err) {
+        setAuth(false);
+      }
+    };
+    verify();
+  }, []);
 
   ///////////////////////USERS//////////////////////////////
   useEffect(() => {
@@ -237,38 +254,44 @@ const Admin = () => {
       case "adminhome":
         return (
           <div className="app__bg">
-            <div className="content">
-              <div className="home-page">
-                <div className="home-box">
-                  <h2>Users</h2>
-                  <p>{users.length}</p>
+            {auth && role === "admin" ? (
+              <div className="content">
+                <div className="home-page">
+                  <div className="home-box">
+                    <h2>Users</h2>
+                    <p>{users.length}</p>
+                  </div>
+                  <div className="home-box">
+                    <h2>Meals</h2>
+                    <p>{meals ? meals.length : 0}</p>
+                  </div>
+                  <div className="home-box">
+                    <h2>Drinks</h2>
+                    <p>{drinks ? drinks.length : 0}</p>
+                  </div>
+                  <div className="home-box">
+                    <h2>Tables</h2>
+                    <p>{tables ? tables.length : 0}</p>
+                  </div>
+                  <div className="home-box">
+                    <h2>Reservations</h2>
+                    <p>{confirmations ? confirmations.length : 0}</p>
+                  </div>
                 </div>
-                <div className="home-box">
-                  <h2>Meals</h2>
-                  <p>{meals ? meals.length : 0}</p>
-                </div>
-                <div className="home-box">
-                  <h2>Drinks</h2>
-                  <p>{drinks ? drinks.length : 0}</p>
-                </div>
-                <div className="home-box">
-                  <h2>Tables</h2>
-                  <p>{tables ? tables.length : 0}</p>
-                </div>
-                <div className="home-box">
-                  <h2>Reservations</h2>
-                  <p>{confirmations ? confirmations.length : 0}</p>
-                </div>
-              </div>
 
-              <div className="recent-activity">
-                <h2>Recent Activity</h2>
-                <ul>
-                  {recentActivity.map((activity, index) => (
-                    <li key={index}>{activity}</li>
-                  ))}
-                </ul>
-                <ul>
+                <div className="recent-activity">
+                  <h2>Recent Activity</h2>
+                  <ul>
+                    {recentActivity.map((activity, index) => (
+                      <div key={index}>
+                        <li>{activity}</li>
+                        <button onClick={() => deleteActivity(index)}>
+                          DeleteActivity
+                        </button>
+                      </div>
+                    ))}
+                  </ul>
+                  {/* <ul>
                   {recentActivity.map((activity, index) => (
                     <div key={index}>
                       <span>{activity}</span>
@@ -277,105 +300,121 @@ const Admin = () => {
                       </button>
                     </div>
                   ))}
-                </ul>
+                </ul> */}
+                </div>
               </div>
-            </div>
+            ) : (
+              <div>
+                <h1>You Do Not Have Access To This Page</h1>
+              </div>
+            )}
           </div>
         );
       case "users":
         return (
           <div className="app__bg">
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Email</th>
-                  <th>Username</th>
-                  <th>Role</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr key={user.id}>
-                    <td>{user.id}</td>
-                    <td>
-                      <input
-                        type="email"
-                        value={
-                          editedUser.id === user.id
-                            ? editedUser.email
-                            : user.email
-                        }
-                        onChange={(e) =>
-                          setEditedUser({
-                            ...editedUser,
-                            email: e.target.value,
-                          })
-                        }
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        value={
-                          editedUser.id === user.id
-                            ? editedUser.username
-                            : user.username
-                        }
-                        onChange={(e) =>
-                          setEditedUser({
-                            ...editedUser,
-                            username: e.target.value,
-                          })
-                        }
-                      />
-                    </td>
-                    <td>{user.role}</td>
-                    <td>
-                      {editedUser.id === user.id ? (
-                        <>
-                          <button onClick={handleSave}>Save</button>
-                          <button
-                            onClick={() => setEditedUser({})}
-                            style={{ background: "red" }}
-                          >
-                            Cancel
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <div className="btn">
-                            <p
-                              className="update"
-                              style={{ marginRight: "5px", marginTop: "-11px" }}
-                              onClick={() => handleEdit(user)}
-                            >
-                              Edit
-                            </p>
-                            <p
-                              className="delete"
-                              onClick={() =>
-                                handleDelete(user.id, user.username)
-                              }
-                            >
-                              Delete
-                            </p>
-                          </div>
-                        </>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {deletedUserId && (
-              <div className="delete-confirmation">
-                <p>Are you sure you want to delete this user?</p>
-                <div className="buttons">
-                  <button onClick={handleConfirmDelete}>Yes</button>
-                  <button onClick={() => setDeletedUserId(null)}>No</button>
-                </div>
+            {auth && role === "admin" ? (
+              <div className="app__bg">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Email</th>
+                      <th>Username</th>
+                      <th>Role</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {users.map((user) => (
+                      <tr key={user.id}>
+                        <td>{user.id}</td>
+                        <td>
+                          <input
+                            type="email"
+                            value={
+                              editedUser.id === user.id
+                                ? editedUser.email
+                                : user.email
+                            }
+                            onChange={(e) =>
+                              setEditedUser({
+                                ...editedUser,
+                                email: e.target.value,
+                              })
+                            }
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="text"
+                            value={
+                              editedUser.id === user.id
+                                ? editedUser.username
+                                : user.username
+                            }
+                            onChange={(e) =>
+                              setEditedUser({
+                                ...editedUser,
+                                username: e.target.value,
+                              })
+                            }
+                          />
+                        </td>
+                        <td>{user.role}</td>
+                        <td>
+                          {editedUser.id === user.id ? (
+                            <>
+                              <button onClick={handleSave}>Save</button>
+                              <button
+                                onClick={() => setEditedUser({})}
+                                style={{ background: "red" }}
+                              >
+                                Cancel
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <div className="btn">
+                                <p
+                                  className="update"
+                                  style={{
+                                    marginRight: "5px",
+                                    marginTop: "-11px",
+                                  }}
+                                  onClick={() => handleEdit(user)}
+                                >
+                                  Edit
+                                </p>
+                                <p
+                                  className="delete"
+                                  onClick={() =>
+                                    handleDelete(user.id, user.username)
+                                  }
+                                >
+                                  Delete
+                                </p>
+                              </div>
+                            </>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {deletedUserId && (
+                  <div className="delete-confirmation">
+                    <p>Are you sure you want to delete this user?</p>
+                    <div className="buttons">
+                      <button onClick={handleConfirmDelete}>Yes</button>
+                      <button onClick={() => setDeletedUserId(null)}>No</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                <h1>You Do Not Have Access To This Page</h1>
               </div>
             )}
           </div>
@@ -383,189 +422,241 @@ const Admin = () => {
       case "meals":
         return (
           <div className="app__bg">
-            <Link
-              to={"/addMeal"}
-              className="app__specialMenu-menu_heading"
-              style={{ display: "flex", justifyContent: "center" }}
-            >
-              Add new meal
-            </Link>
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Cover</th>
-                  <th>Name</th>
-                  <th>Price</th>
-                  <th>Desc</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {meals.map((meal) => (
-                  <tr key={meal.idmenu}>
-                    {" "}
-                    <td>{meal.idmenu}</td>
-                    <td>
-                      <img src={meal.cover} alt="" className="img" />
-                    </td>
-                    <td>{meal.title}</td>
-                    <td>{meal.price}</td>
-                    <td>{meal.desc}</td>
-                    <td>
-                      <div className="btn">
-                        <p
-                          className="delete"
-                          onClick={() => handleDeleteMeal(meal.idmenu)}
-                        >
-                          Delete
-                        </p>
-                        <Link
-                          className="update-btn"
-                          to={`/update/${meal.idmenu}`}
-                        >
-                          <p className="update">Update</p>
-                        </Link>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {auth && role === "admin" ? (
+              <div className="app__bg">
+                <Link
+                  to={"/addMeal"}
+                  className="app__specialMenu-menu_heading"
+                  style={{ display: "flex", justifyContent: "center" }}
+                >
+                  Add new meal
+                </Link>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Cover</th>
+                      <th>Name</th>
+                      <th>Price</th>
+                      <th>Desc</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {meals.map((meal) => (
+                      <tr key={meal.idmenu}>
+                        {" "}
+                        <td>{meal.idmenu}</td>
+                        <td>
+                          <img src={meal.cover} alt="" className="img" />
+                        </td>
+                        <td>{meal.title}</td>
+                        <td>{meal.price}</td>
+                        <td>{meal.desc}</td>
+                        <td>
+                          <div className="btn">
+                            <p
+                              className="delete"
+                              onClick={() => handleDeleteMeal(meal.idmenu)}
+                            >
+                              Delete
+                            </p>
+                            <Link
+                              className="update-btn"
+                              to={`/update/${meal.idmenu}`}
+                            >
+                              <p className="update">Update</p>
+                            </Link>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div>
+                <h1>You Do Not Have Access To This Page</h1>
+              </div>
+            )}
           </div>
         );
       case "drinks":
         return (
           <div className="app__bg">
-            <Link
-              to={"/addDrink"}
-              className="app__specialMenu-menu_heading"
-              style={{ display: "flex", justifyContent: "center" }}
-            >
-              Add new Drink
-            </Link>
-            <h1>Drinks</h1>
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Ingredients</th>
-                  <th>Price</th>
-                  <th>Cover</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {drinks.map((drink) => (
-                  <tr key={drink.id}>
-                    <td>{drink.name}</td>
-                    <td>{drink.ingredients}</td>
-                    <td>{drink.price}</td>
-                    <img src={drink.cover} alt="" className="img" />
-                    <td>
-                      <p
-                        className="update"
-                        style={{ marginBottom: "15px" }}
-                        onClick={() => handleEditDrink(drink)}
-                      >
-                        Edit
-                      </p>
-                      <div className="btn">
-                        <p
-                          className="delete"
-                          onClick={() => handleDeleteDrink(drink.iddrinks)}
-                        >
-                          Delete
-                        </p>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {auth && role === "admin" ? (
+              <div className="app__bg">
+                <Link
+                  to={"/addDrink"}
+                  className="app__specialMenu-menu_heading"
+                  style={{ display: "flex", justifyContent: "center" }}
+                >
+                  Add new Drink
+                </Link>
+                <h1>Drinks</h1>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Ingredients</th>
+                      <th>Price</th>
+                      <th>Cover</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {drinks.map((drink) => (
+                      <tr key={drink.id}>
+                        <td>{drink.name}</td>
+                        <td>{drink.ingredients}</td>
+                        <td>{drink.price}</td>
+                        <img src={drink.cover} alt="" className="img" />
+                        <td>
+                          <Link
+                            className="update-btn"
+                            to={`/updateDrink/${drink.iddrinks}`}
+                          >
+                            <p
+                              className="update"
+                              style={{ marginBottom: "15px" }}
+                              onClick={() => handleEditDrink(drink)}
+                            >
+                              Edit
+                            </p>
+                          </Link>
+
+                          <div className="btn">
+                            <p
+                              className="delete"
+                              onClick={() => handleDeleteDrink(drink.iddrinks)}
+                            >
+                              Delete
+                            </p>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div>
+                <h1>You Do Not Have Access To This Page</h1>
+              </div>
+            )}
           </div>
         );
       case "tables":
         return (
           <div className="app__bg">
-            <Link
-              to={"/addTable"}
-              className="app__specialMenu-menu_heading"
-              style={{ display: "flex", justifyContent: "center" }}
-            >
-              Add new Table
-            </Link>
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Date</th>
-                  <th>Time</th>
-                  <th>Location</th>
-                  <th>TableSize</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tables.map((table) => (
-                  <tr key={table.id}>
-                    <td>{table.id}</td>
-                    <td>{table.date}</td>
-                    <td>{table.time}</td>
-                    <td>{table.location}</td>
-                    <td>{table.tablesize}</td>
-                    <td>
-                      <div className="btn">
-                        <p
-                          className="delete"
-                          onClick={() => handleDeleteTable(table.id)}
-                        >
-                          Delete
-                        </p>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {auth && role === "admin" ? (
+              <div className="app__bg">
+                <Link
+                  to={"/addTable"}
+                  className="app__specialMenu-menu_heading"
+                  style={{ display: "flex", justifyContent: "center" }}
+                >
+                  Add new Table
+                </Link>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Date</th>
+                      <th>Time</th>
+                      <th>Location</th>
+                      <th>TableSize</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tables.map((table) => (
+                      <tr key={table.id}>
+                        <td>{table.id}</td>
+                        <td>{table.date}</td>
+                        <td>{table.time}</td>
+                        <td>{table.location}</td>
+                        <td>{table.tablesize}</td>
+                        <td>
+                          <Link
+                            className="update-btn"
+                            to={`/updateTable/${table.id}`}
+                          >
+                            <p
+                              className="update"
+                              style={{ marginBottom: "15px" }}
+                              onClick={() => handleEditDrink(table)}
+                            >
+                              Edit
+                            </p>
+                          </Link>
+                          <div className="btn">
+                            <p
+                              className="delete"
+                              onClick={() => handleDeleteTable(table.id)}
+                            >
+                              Delete
+                            </p>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div>
+                <h1>You Do Not Have Access To This Page</h1>
+              </div>
+            )}
           </div>
         );
       case "confirmations":
         return (
           <div className="app__bg">
-            <h2>Confirmations</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Phone Number</th>
-                  <th>Email</th>
-                  <th>Table Number</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {confirmations.map((confirmation) => (
-                  <tr key={confirmation.idreservations}>
-                    <td>{confirmation.idreservations}</td>
-                    <td>{confirmation.name}</td>
-                    <td>{confirmation.phonenumber}</td>
-                    <td>{confirmation.email}</td>
-                    <td>{confirmation.idtable}</td>
-                    <td>
-                      <button
-                        onClick={() =>
-                          handleDeleteReservation(confirmation.idreservations)
-                        }
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {auth && role === "admin" ? (
+              <div className="app__bg">
+                <h2>Confirmations</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Phone Number</th>
+                      <th>Email</th>
+                      <th>Table Number</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {confirmations.map((confirmation) => (
+                      <tr key={confirmation.idreservations}>
+                        <td>{confirmation.idreservations}</td>
+                        <td>{confirmation.name}</td>
+                        <td>{confirmation.phonenumber}</td>
+                        <td>{confirmation.email}</td>
+                        <td>{confirmation.idtable}</td>
+                        <td>
+                          <button
+                            onClick={() =>
+                              handleDeleteReservation(
+                                confirmation.idreservations
+                              )
+                            }
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div>
+                <h1>You Do Not Have Access To This Page</h1>
+              </div>
+            )}
           </div>
         );
 
@@ -587,51 +678,59 @@ const Admin = () => {
   };
   return (
     <div className="admin">
-      <div className="content">{renderContent()}</div>
+      {auth && role === "admin" ? (
+        <div className="admin">
+          <div className="content">{renderContent()}</div>
 
-      <div className="sidebar">
-        <ul>
-          <li
-            className={activeTab === "adminhome" ? "active" : ""}
-            onClick={() => handleTabChange("adminhome")}
-          >
-            Home
-          </li>
-          <li
-            className={activeTab === "users" ? "active" : ""}
-            onClick={() => handleTabChange("users")}
-          >
-            Users
-          </li>
-          <li
-            className={activeTab === "meals" ? "active" : ""}
-            onClick={() => handleTabChange("meals")}
-          >
-            Meals
-          </li>
-          <li
-            className={activeTab === "drink" ? "active" : ""}
-            onClick={() => handleTabChange("drinks")}
-          >
-            Drinks
-          </li>
-          <li
-            className={activeTab === "tables" ? "active" : ""}
-            onClick={() => handleTabChange("tables")}
-          >
-            Tables
-          </li>
-          <li
-            className={activeTab === "confirmations" ? "active" : ""}
-            onClick={() => handleTabChangee("confirmations")}
-          >
-            Reservations
-          </li>
-          <li className="logout" onClick={handleLogout}>
-            Logout
-          </li>
-        </ul>
-      </div>
+          <div className="sidebar">
+            <ul>
+              <li
+                className={activeTab === "adminhome" ? "active" : ""}
+                onClick={() => handleTabChange("adminhome")}
+              >
+                Home
+              </li>
+              <li
+                className={activeTab === "users" ? "active" : ""}
+                onClick={() => handleTabChange("users")}
+              >
+                Users
+              </li>
+              <li
+                className={activeTab === "meals" ? "active" : ""}
+                onClick={() => handleTabChange("meals")}
+              >
+                Meals
+              </li>
+              <li
+                className={activeTab === "drink" ? "active" : ""}
+                onClick={() => handleTabChange("drinks")}
+              >
+                Drinks
+              </li>
+              <li
+                className={activeTab === "tables" ? "active" : ""}
+                onClick={() => handleTabChange("tables")}
+              >
+                Tables
+              </li>
+              <li
+                className={activeTab === "confirmations" ? "active" : ""}
+                onClick={() => handleTabChangee("confirmations")}
+              >
+                Reservations
+              </li>
+              <li className="logout" onClick={handleLogout}>
+                Logout
+              </li>
+            </ul>
+          </div>
+        </div>
+      ) : (
+        <div>
+          <h1>You Do Not Have Access To This Page</h1>
+        </div>
+      )}
     </div>
   );
 };

@@ -20,3 +20,12 @@ input[type="text"] {
   display: flex;
   justify-content: center;
 }
+.input_number{
+  width: 100%;
+  padding: 15px;
+  font-family: var(--font-alt);
+  color: rgb(59, 59, 59);
+  font-size: medium;
+  font-weight: 600;
+  margin-bottom: 10px;
+}

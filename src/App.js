@@ -23,6 +23,8 @@ import AddMeal from "./container/AddMeal/AddMeal";
 import AddTable from "./container/AddTable/AddTable";
 import AddDrink from "./container/AddDrink/AddDrink";
 import Inventory from "./container/Inventory/Inventory";
+import UpdateDrink from "./container/Update/UpdateDrink";
+import UpdateTable from "./container/Update/UpdateTable";
 
 const App = () => {
   return (
@@ -49,7 +51,9 @@ const App = () => {
         <Route path="/confirmation/:id" element={<Confirmation />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/viewMenu" element={<ViewMenu />} />
+        <Route path="/updateDrink/:iddrinks" element={<UpdateDrink />} />
         <Route path="/update/:idmenu" element={<Update />} />
+        <Route path="/updateTable/:id" element={<UpdateTable />} />
         <Route path="/addMeal" element={<AddMeal />} />
         <Route path="/addTable" element={<AddTable />} />
         <Route path="/addDrink" element={<AddDrink />} />
