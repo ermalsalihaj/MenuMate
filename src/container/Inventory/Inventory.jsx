@@ -35,6 +35,15 @@ const Inventory = () => {
     };
     fetchAll();
   }, []);
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete("http://localhost:3001/stock/" + id);
+
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -80,6 +89,7 @@ const Inventory = () => {
                       <th>Average Cost/Unit</th>
                       <th>Available</th>
                       <th>Alert</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
 
@@ -98,6 +108,12 @@ const Inventory = () => {
                             ""
                           )}
                         </td>
+                        <p
+                          className="delete" style={{marginTop:"5px"}}
+                          onClick={() => handleDelete(item.id)}
+                        >
+                          Delete
+                        </p>
                       </tr>
                     ))}
                   </tbody>

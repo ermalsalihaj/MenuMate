@@ -136,7 +136,8 @@ app.get("/menu", (req, res) => {
 });
 
 app.post("/menu", (req, res) => {
-  const q = "Insert into menu (`title`,`description`,`price`,`cover`) VALUES(?)";
+  const q =
+    "Insert into menu (`title`,`description`,`price`,`cover`) VALUES(?)";
   const VALUES = [
     req.body.title,
     req.body.description,
@@ -242,6 +243,17 @@ app.get("/stock", (req, res) => {
     return res.json(data);
   });
 });
+app.delete("/stock/:id", (req, res) => {
+  const stockId = req.params.id;
+  const q = "DELETE FROM stock WHERE id = ?";
+  con.query(q, stockId, (err, result) => {
+    if (err) return res.json(err);
+    if (result.affectedRows === 0) {
+      return res.json({ message: "Stock item not found." });
+    }
+    return res.json({ message: "Stock item deleted successfully." });
+  });
+});
 
 app.get("/register", (req, res) => {
   const q = "SELECT * FROM stock s inner join wastage w on s.id=w.idstock ";
@@ -250,8 +262,6 @@ app.get("/register", (req, res) => {
     return res.json(data);
   });
 });
-
-
 
 /////////////////////  RESERVATIONS  //////////////////////////////////
 
