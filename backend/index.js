@@ -52,11 +52,44 @@ app.get("/users", (req, res) => {
     }
   });
 });
-
-app.put("/update", (req, res) => {
-  const id = req.query.id;
+app.post("/register", (req, res) => {
   const email = req.body.email;
   const username = req.body.username;
+  const password = req.body.password;
+  const role = "user";
+
+  con.query(
+    "SELECT * FROM users WHERE username = ?",
+    [username],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send({ message: "An error occurred." });
+      } else {
+        if (result.length > 0) {
+          res.send({ message: "Username already taken." });
+        } else {
+          con.query(
+            "INSERT INTO users (email, username, password, role) VALUES (?, ?, ?, ?)",
+            [email, username, password, role],
+            (err, result) => {
+              if (err) {
+                console.log(err);
+                res.status(500).send({ message: "An error occurred." });
+              } else {
+                res.send({ message: "User registered successfully." });
+              }
+            }
+          );
+        }
+      }
+    }
+  );
+});
+
+app.put("/update/:id", (req, res) => {
+  const id = req.params.id;
+  const { email, username } = req.body;
 
   con.query(
     "UPDATE users SET email = ?, username = ? WHERE id = ?",
@@ -75,7 +108,6 @@ app.put("/update", (req, res) => {
     }
   );
 });
-
 app.delete("/delete/:id", (req, res) => {
   const id = req.params.id;
 
@@ -220,24 +252,7 @@ app.get("/register", (req, res) => {
   });
 });
 
-app.post("/register", (req, res) => {
-  const email = req.body.email;
-  const username = req.body.username;
-  const password = req.body.password;
 
-  con.query(
-    "INSERT INTO users (email,username,password) VALUES (?,?,?)",
-    [email, username, password],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(500).send({ message: "An error occurred." });
-      } else {
-        res.send({ message: "User registered successfully." });
-      }
-    }
-  );
-});
 
 /////////////////////  RESERVATIONS  //////////////////////////////////
 

@@ -11,85 +11,31 @@ const Admin = () => {
   const [name, setName] = useState("");
   const [tables, setTable] = useState();
   const [confirm, setConfirm] = useState();
-
-  const [deletedtableId, setDeletedTableId] = useState(null);
-  const [deletedConfId, setDeletedConfId] = useState(null);
-
   const [recentActivity, setRecentActivity] = useState([]);
   const [meals, setMeal] = useState([]);
   const [confirmations, setConfirmations] = useState([]);
+  const [updatedTable, setUpdatedTable] = useState({});
+  const [drinks, setDrinks] = useState([]);
+  const [editedDrink, setEditedDrink] = useState({});
+  const [deletedDrinkId, setDeletedDrinkId] = useState(null);
 
-  useEffect(() => {
-    const fetchConfirmations = async () => {
-      try {
-        const res = await axios.get("http://localhost:3001/reservations");
-        setConfirmations(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchConfirmations();
-  }, []);
-  const handleCondDelete = async (id) => {
-    const confDelete = confirmations.find(
-      (confirm) => confirmations.idreservations === deletedConfId
-    );
-    if (confDelete) {
-      addActivity(
-        `Reservation with ID: ${confDelete.idreservations} is deleted`
-      );
-
-      try {
-        await axios.delete(`http://localhost:3001/reservations/${id}`);
-        setConfirm(
-          confirmations.filter((confirm) => confirmations.idreservations !== id)
-        );
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
-  const handleDeleteConf = (id) => {
-    setDeletedConfId(id);
-  };
-
-  useEffect(() => {
-    const fetchAllMeals = async () => {
-      try {
-        const res = await axios.get("http://localhost:3001/menu");
-        setMeal(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchAllMeals();
-  }, []);
-  const navigate = useNavigate();
-
+  ///////////////////////USERS//////////////////////////////
   useEffect(() => {
     axios.get("http://localhost:3001/users").then((response) => {
       setUsers(response.data);
     });
   }, []);
+
   const handleEdit = (user) => {
     setEditedUser(user);
   };
-  useEffect(() => {
-    const fetchAllTables = async () => {
-      try {
-        const res = await axios.get("http://localhost:3001/booktable");
-        setTable(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchAllTables();
-  }, []);
 
   const handleSave = (user) => {
     const { password, ...editedUserData } = editedUser;
+    const { id, email, username } = editedUserData;
+
     axios
-      .put(`http://localhost:3001/update?id=${editedUser.id}`, {})
+      .put(`http://localhost:3001/update/${id}`, { email, username })
       .then((response) => {
         console.log(response.data);
 
@@ -102,44 +48,12 @@ const Admin = () => {
       .catch((error) => {
         console.error(error);
       });
+
     addActivity(
       `User ${editedUser.username} with ID: ${editedUser.id} changed the username`
     );
   };
-  const addActivity = (activity) => {
-    setRecentActivity((prevActivity) => [
-      activity,
-      ...prevActivity.slice(0, 2),
-    ]);
-  };
 
-  const handleDelete = (id, username) => {
-    setDeletedUserId(id);
-  };
-  const handleDeleteMeal = async (id) => {
-    try {
-      await axios.delete("http://localhost:3001/menu/" + id);
-      window.location.reload();
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  const handleDeleteTab = (id) => {
-    setDeletedTableId(id);
-  };
-  const handleDeleteTable = async (id) => {
-    const tableToDelete = tables.find((table) => table.id === deletedtableId);
-    if (tableToDelete) {
-      addActivity(`Table with ID: ${tableToDelete.id} is deleted`);
-
-      try {
-        await axios.delete(`http://localhost:3001/booktable/${id}`);
-        setTable(tables.filter((table) => table.id !== id));
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
   const handleConfirmDelete = () => {
     const userToDelete = users.find((user) => user.id === deletedUserId);
     if (userToDelete) {
@@ -159,10 +73,159 @@ const Admin = () => {
         });
     }
   };
+
+  const handleDelete = (id, username) => {
+    setDeletedUserId(id);
+  };
+
+  ////////////////////////////MENU/////////////////////////////////////////
+  // Meals
+  useEffect(() => {
+    const fetchAllMeals = async () => {
+      try {
+        const res = await axios.get("http://localhost:3001/menu");
+        setMeal(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchAllMeals();
+  }, []);
+
+  const handleDeleteMeal = async (id) => {
+    try {
+      await axios.delete("http://localhost:3001/menu/" + id);
+      addActivity(`Meal with ID: ${id} is deleted`);
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  // Drinks
+  useEffect(() => {
+    axios.get("http://localhost:3001/drinks").then((response) => {
+      setDrinks(response.data);
+    });
+  }, []);
+
+  const handleEditDrink = (drink) => {
+    setEditedDrink(drink);
+  };
+
+  const handleSaveDrink = (drink) => {
+    axios
+      .put(`http://localhost:3001/drinks/${drink.id}`, drink)
+      .then((response) => {
+        console.log(response.data);
+
+        setDrinks(drinks.map((d) => (d.id === drink.id ? drink : d)));
+
+        setEditedDrink({});
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleDeleteDrink = async (id) => {
+    try {
+      await axios.delete("http://localhost:3001/drinks/" + id);
+      addActivity(`Drink with ID: ${id} is deleted`);
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  /////////////////////BookTable////////////////////////////////////////////////
+  useEffect(() => {
+    const fetchAllTables = async () => {
+      try {
+        const res = await axios.get("http://localhost:3001/booktable");
+        setTable(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchAllTables();
+  }, []);
+
+  const handleDeleteTable = async (id) => {
+    try {
+      await axios.delete("http://localhost:3001/booktable/" + id);
+      addActivity(`Table with ID: ${id} is deleted`);
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const handleTabChangee = (tab) => {
     setActiveTab(tab);
   };
 
+  ////////////////////////Reservations//////////////////////////////////
+
+  useEffect(() => {
+    const fetchConfirmations = async () => {
+      try {
+        const res = await axios.get("http://localhost:3001/reservations");
+        setConfirmations(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchConfirmations();
+  }, []);
+
+  const handleDeleteReservation = async (id) => {
+    try {
+      await axios.delete("http://localhost:3001/reservations/" + id);
+      addActivity(`Reservation with ID: ${id} is deleted`);
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  /////////Activity//////////////////////
+  const navigate = useNavigate();
+  useEffect(() => {
+    const storedActivities = localStorage.getItem("activities");
+    if (storedActivities) {
+      setRecentActivity(JSON.parse(storedActivities));
+    }
+  }, []);
+
+  const saveActivityToLocalStorage = (activity) => {
+    const existingActivities = localStorage.getItem("activities");
+    const parsedActivities = existingActivities
+      ? JSON.parse(existingActivities)
+      : [];
+    const updatedActivities = [activity, ...parsedActivities.slice(0, 2)];
+    localStorage.setItem("activities", JSON.stringify(updatedActivities));
+  };
+
+  const addActivity = (activity) => {
+    setRecentActivity((prevActivity) => [
+      activity,
+      ...prevActivity.slice(0, 2),
+    ]);
+    saveActivityToLocalStorage(activity);
+  };
+  const deleteActivity = (index) => {
+    setRecentActivity((prevActivity) => {
+      const updatedActivity = [...prevActivity];
+      updatedActivity.splice(index, 1);
+      return updatedActivity;
+    });
+
+    const storedActivities = localStorage.getItem("activities");
+    if (storedActivities) {
+      const parsedActivities = JSON.parse(storedActivities);
+      parsedActivities.splice(index, 1);
+      localStorage.setItem("activities", JSON.stringify(parsedActivities));
+    }
+  };
   const [activeTab, setActiveTab] = useState("adminhome");
 
   const handleTabChange = (tab) => {
@@ -185,6 +248,10 @@ const Admin = () => {
                   <p>{meals ? meals.length : 0}</p>
                 </div>
                 <div className="home-box">
+                  <h2>Drinks</h2>
+                  <p>{drinks ? drinks.length : 0}</p>
+                </div>
+                <div className="home-box">
                   <h2>Tables</h2>
                   <p>{tables ? tables.length : 0}</p>
                 </div>
@@ -199,6 +266,16 @@ const Admin = () => {
                 <ul>
                   {recentActivity.map((activity, index) => (
                     <li key={index}>{activity}</li>
+                  ))}
+                </ul>
+                <ul>
+                  {recentActivity.map((activity, index) => (
+                    <div key={index}>
+                      <span>{activity}</span>
+                      <button onClick={() => deleteActivity(index)}>
+                        DeleteActivity
+                      </button>
+                    </div>
                   ))}
                 </ul>
               </div>
@@ -268,13 +345,23 @@ const Admin = () => {
                         </>
                       ) : (
                         <>
-                          <button onClick={() => handleEdit(user)}>Edit</button>
-                          <button
-                            onClick={() => handleDelete(user.id, user.username)}
-                            style={{ background: "red" }}
-                          >
-                            Delete
-                          </button>
+                          <div className="btn">
+                            <p
+                              className="update"
+                              style={{ marginRight: "5px", marginTop: "-11px" }}
+                              onClick={() => handleEdit(user)}
+                            >
+                              Edit
+                            </p>
+                            <p
+                              className="delete"
+                              onClick={() =>
+                                handleDelete(user.id, user.username)
+                              }
+                            >
+                              Delete
+                            </p>
+                          </div>
                         </>
                       )}
                     </td>
@@ -347,6 +434,57 @@ const Admin = () => {
             </table>
           </div>
         );
+      case "drinks":
+        return (
+          <div className="app__bg">
+            <Link
+              to={"/addDrink"}
+              className="app__specialMenu-menu_heading"
+              style={{ display: "flex", justifyContent: "center" }}
+            >
+              Add new Drink
+            </Link>
+            <h1>Drinks</h1>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Ingredients</th>
+                  <th>Price</th>
+                  <th>Cover</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {drinks.map((drink) => (
+                  <tr key={drink.id}>
+                    <td>{drink.name}</td>
+                    <td>{drink.ingredients}</td>
+                    <td>{drink.price}</td>
+                    <img src={drink.cover} alt="" className="img" />
+                    <td>
+                      <p
+                        className="update"
+                        style={{ marginBottom: "15px" }}
+                        onClick={() => handleEditDrink(drink)}
+                      >
+                        Edit
+                      </p>
+                      <div className="btn">
+                        <p
+                          className="delete"
+                          onClick={() => handleDeleteDrink(drink.iddrinks)}
+                        >
+                          Delete
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
       case "tables":
         return (
           <div className="app__bg">
@@ -380,7 +518,7 @@ const Admin = () => {
                       <div className="btn">
                         <p
                           className="delete"
-                          onClick={() => handleDeleteTab(table.id)}
+                          onClick={() => handleDeleteTable(table.id)}
                         >
                           Delete
                         </p>
@@ -418,7 +556,7 @@ const Admin = () => {
                     <td>
                       <button
                         onClick={() =>
-                          handleDeleteConf(confirmation.idreservations)
+                          handleDeleteReservation(confirmation.idreservations)
                         }
                       >
                         Delete
@@ -470,6 +608,12 @@ const Admin = () => {
             onClick={() => handleTabChange("meals")}
           >
             Meals
+          </li>
+          <li
+            className={activeTab === "drink" ? "active" : ""}
+            onClick={() => handleTabChange("drinks")}
+          >
+            Drinks
           </li>
           <li
             className={activeTab === "tables" ? "active" : ""}

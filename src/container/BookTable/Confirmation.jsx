@@ -101,7 +101,7 @@ const Confirmation = () => {
 
         <div className="confirmation-container">
           <h2>CONFIRMATION FORM</h2>
-          <p>Table ID: {id}</p>
+          <p>You are reserving table number : {id}</p>
           <br />
           <form onSubmit={handleSubmit}>
             <input
@@ -131,11 +131,12 @@ const Confirmation = () => {
             <br />
             <br />
             <input
-              type="email"
+              type="text"
               className="confirmation-input"
               placeholder="Email"
               value={email}
               onChange={handleEmailChange}
+             
             />
             <br />
             {errors.email && (

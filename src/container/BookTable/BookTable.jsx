@@ -69,7 +69,7 @@ const BookTable = () => {
   });
 
   return (
-    <div className="app__bg" style={{ height: "100%" }}>
+    <div className="app__bg" style={{ height: "150vh" }}>
       <div className="navbar">
         <div className="app__navbar-logo">
           <img src={images.menumate} alt="app logo" />
@@ -134,7 +134,7 @@ const BookTable = () => {
 
       <div className="content">
         <h1>Table Availability</h1>
-        <p>Available Tables: </p>
+        <p>Available Tables: {filteredTables.length}</p>
         {filteredTables.length > 0 ? (
           filteredTables.map((table) => (
             <div key={table.id} className="table-item">
@@ -151,14 +151,15 @@ const BookTable = () => {
         ) : (
           <p>No tables available matching the selected filters.</p>
         )}
-        {filteredTables.map((table) => (
+
+        {filteredTables.length > 0 && (
           <button
-            onClick={() => handleFormSubmit(table.id)}
+            onClick={() => handleFormSubmit(filteredTables[0].id)}
             className="button-light-yellow"
           >
             <p>CONFIRM</p>
           </button>
-        ))}
+        )}
 
         {!isFormValid && (
           <p className="error-message">*Please fill in all required fields.</p>

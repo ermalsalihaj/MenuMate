@@ -21,14 +21,20 @@ function Login() {
       email: email,
       username: username,
       password: password,
-    }).then((response) => {
-      if (response.data.message) {
-        setRegisterStatus(response.data.message);
-      } else {
-        setRegisterStatus("Account created successfully");
-      }
-    });
+    })
+      .then((response) => {
+        if (response.data.message) {
+          setRegisterStatus(response.data.message);
+        } else {
+          setRegisterStatus("Account created successfully");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setRegisterStatus("An error occurred.");
+      });
   };
+  
 
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
@@ -116,7 +122,8 @@ function Login() {
                 </a>
               </b>
             </p>
-            <p style={{ color: "green" }}>{registerStatus}</p>
+            <p style={{ color: registerStatus.includes("taken") ? "red" : "green" }}>{registerStatus}</p>
+
           </form>
         </div>
       ) : (
@@ -133,6 +140,7 @@ function Login() {
               }}
               placeholder="Enter username"
               required
+              value={username}
             />
             <label htmlFor="password">Password: </label>
             <input
