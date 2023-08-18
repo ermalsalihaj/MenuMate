@@ -128,56 +128,138 @@ app.delete("/delete/:id", (req, res) => {
 /////////////////////  MENU  //////////////////////////////////
 
 app.get("/menu", (req, res) => {
-  const q = "SELECT * FROM menu";
+  const q = `
+    SELECT
+      m.idmenu,
+      m.title,
+      m.price,
+      m.cover,
+      s.id,
+      s.itemname,
+      s.unit,
+      s.cost,
+      s.available,
+      s.itemid
+    FROM
+      menu m
+      LEFT JOIN menu_stock ms ON m.idmenu = ms.idmenu
+      inner JOIN stock s ON ms.idstock = s.id
+    ORDER BY
+      m.idmenu
+  `;
+
   con.query(q, (err, data) => {
-    if (err) return res.json(err);
-    return res.json(data);
+    if (err) {
+      console.log(err);
+      return res.status(500).send({ message: "An error occurred." });
+    }
+
+    const menuItemsWithIngredients = [];
+    let currentMenuId = null;
+    let currentItem = null;
+
+    for (const row of data) {
+      if (row.idmenu !== currentMenuId) {
+        // If new menu item, create a new item object
+        currentMenuId = row.idmenu;
+        currentItem = {
+          idmenu: row.idmenu,
+          title: row.title,
+          price: row.price,
+          cover: row.cover,
+          ingredients: [],
+        };
+        menuItemsWithIngredients.push(currentItem);
+      }
+
+      // Add ingredient to the current ingredients array
+      if (row.id !== null) {
+        const ingredient = {
+          id: row.id,
+          itemname: row.itemname,
+          unit: row.unit,
+          cost: row.cost,
+          available: row.available,
+          itemid: row.itemid,
+        };
+        currentItem.ingredients.push(ingredient);
+      }
+    }
+
+    res.json(menuItemsWithIngredients);
   });
 });
 
 app.post("/menu", (req, res) => {
-  const q =
-    "Insert into menu (`title`,`description`,`price`,`cover`) VALUES(?)";
-  const VALUES = [
-    req.body.title,
-    req.body.description,
-    req.body.price,
-    req.body.cover,
-  ];
+  const mealData = {
+    title: req.body.title,
+    price: req.body.price,
+    cover: req.body.cover,
+  };
 
-  con.query(q, [VALUES], (err, data) => {
+  const ingredientIds = req.body.ingredients;
+
+  const q = "INSERT INTO menu (title, price, cover) VALUES (?, ?, ?)";
+  const values = [mealData.title, mealData.price, mealData.cover];
+
+  con.query(q, values, (err, result) => {
     if (err) return res.json(err);
-    return res.json("Meal created successfully.");
+
+    const mealId = result.insertId;
+    const insertIngredientsQuery =
+      "INSERT INTO menu_stock (idmenu, idstock) VALUES ?";
+    const ingredientRows = ingredientIds.map((idstock) => [mealId, idstock]);
+
+    con.query(insertIngredientsQuery, [ingredientRows], (err) => {
+      if (err) return res.json(err);
+      return res.json("Meal and ingredients added successfully.");
+    });
   });
 });
 
 app.delete("/menu/:idmenu", (req, res) => {
   const idmenu = req.params.idmenu;
   const q = "DELETE FROM menu where idmenu = ?";
+  const menuStock = "DELETE FROM menu_stock WHERE idmenu = ?";
 
-  con.query(q, [idmenu], (err, data) => {
+  con.query(menuStock, [idmenu], (err) => {
     if (err) return res.json(err);
-    return res.json("Meal deleted successfully.");
+
+    con.query(q, [idmenu], (err, data) => {
+      if (err) return res.json(err);
+      return res.json("Meal deleted successfully.");
+    });
   });
 });
 
 app.put("/viewMenu/:idmenu", (req, res) => {
   const idmenu = req.params.idmenu;
   const q =
-    "UPDATE menu SET `title` = ?, `description` = ?, `price` = ?, `cover` = ? WHERE idmenu = ? ";
+    "UPDATE menu SET `title` = ?, `price` = ?, `cover` = ? WHERE idmenu = ? ";
 
-  const values = [
-    req.body.title,
-    req.body.description,
-    req.body.price,
-    req.body.cover,
-  ];
+  const values = [req.body.title, req.body.price, req.body.cover];
 
   values.push(idmenu);
+  const newIngredientIds = req.body.ingredients;
 
-  con.query(q, values, (err, data) => {
+  con.query(q, values, async (err, data) => {
     if (err) return res.json(err);
-    return res.json("Meal updated successfully.");
+
+    try {
+      // Insert new ingredient associations into menu_stock
+      const insertIngredientsQuery =
+        "INSERT INTO menu_stock (idmenu, idstock) VALUES ?";
+      const newIngredientRows = newIngredientIds.map((idstock) => [
+        idmenu,
+        idstock,
+      ]);
+
+      await con.query(insertIngredientsQuery, [newIngredientRows]);
+      console.log(newIngredientRows);
+      return res.json("Meal updated successfully with new ingredients.");
+    } catch (error) {
+      return res.json(error);
+    }
   });
 });
 
@@ -234,6 +316,60 @@ app.put("/drinks/:iddrinks", (req, res) => {
   });
 });
 
+///////////////////// /////////////////
+app.get("/pizza", (req, res) => {
+  const q = "SELECT * FROM pizza";
+  con.query(q, (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data);
+  });
+});
+
+app.post("/pizza", (req, res) => {
+  const q =
+    "Insert into pizza (`name`,`ingredients`,`price`,`cover`) VALUES(?)";
+  const VALUES = [
+    req.body.name,
+    req.body.ingredients,
+    req.body.price,
+    req.body.cover,
+  ];
+
+  con.query(q, [VALUES], (err, data) => {
+    if (err) return res.json(err);
+    return res.json("Pizza created successfully.");
+  });
+});
+
+app.delete("/pizza/:idpizza", (req, res) => {
+  const idpizza = req.params.idpizza;
+  const q = "DELETE FROM pizza where idpizza = ?";
+
+  con.query(q, [idpizza], (err, data) => {
+    if (err) return res.json(err);
+    return res.json("Pizza deleted successfully.");
+  });
+});
+
+app.put("/pizza/:idpizza", (req, res) => {
+  const idpizza = req.params.idpizza;
+  const q =
+    "UPDATE pizza SET `name` = ?, `ingredients` = ?, `price` = ?, `cover` = ? WHERE idpizza = ? ";
+
+  const values = [
+    req.body.name,
+    req.body.ingredients,
+    req.body.price,
+    req.body.cover,
+    idpizza,
+  ];
+
+  con.query(q, values, (err, data) => {
+    if (err) return res.json(err);
+    return res.json("Pizza updated successfully.");
+  });
+});
+
 /////////////////////  INVENTORY  //////////////////////////////////
 
 app.get("/stock", (req, res) => {
@@ -243,6 +379,15 @@ app.get("/stock", (req, res) => {
     return res.json(data);
   });
 });
+
+app.get("/ingredients", (req, res) => {
+  const q = "SELECT * FROM stock";
+  con.query(q, (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data);
+  });
+});
+
 app.delete("/stock/:id", (req, res) => {
   const stockId = req.params.id;
   const q = "DELETE FROM stock WHERE id = ?";
@@ -252,6 +397,18 @@ app.delete("/stock/:id", (req, res) => {
       return res.json({ message: "Stock item not found." });
     }
     return res.json({ message: "Stock item deleted successfully." });
+  });
+});
+
+app.post("/menu/:idmenu/stock/:idstock", (req, res) => {
+  const idmenu = req.params.idmenu;
+  const idstock = req.params.idstock;
+
+  const q = "INSERT INTO menu_stock (idmenu, idstock) VALUES (?, ?)";
+
+  con.query(q, [idmenu, idstock], (err, data) => {
+    if (err) return res.json(err);
+    return res.json("Ingredient added to menu successfully.");
   });
 });
 
@@ -266,30 +423,45 @@ app.get("/register", (req, res) => {
 /////////////////////  RESERVATIONS  //////////////////////////////////
 
 app.get("/reservations", (req, res) => {
-  const id = req.params.id;
-  con.query("SELECT * FROM reservations", (err, result) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send({ message: "An error occurred." });
-    } else {
-      res.send(result);
-    }
-  });
-});
-
-app.post("/reservations", (req, res) => {
-  const { name, phoneNumber, email, idtable } = req.body;
-
   con.query(
-    "INSERT INTO reservations (name, phoneNumber, email, idtable) VALUES (?, ?, ?, ?)",
-    [name, phoneNumber, email, idtable],
+    "SELECT * FROM reservations r inner join users u on u.id=r.userid",
     (err, result) => {
       if (err) {
         console.log(err);
         res.status(500).send({ message: "An error occurred." });
       } else {
-        res.send({ message: "Reservation created successfully." });
+        res.send(result);
       }
+    }
+  );
+});
+
+app.post("/reservations", (req, res) => {
+  const { name, phoneNumber, email, idtable, userid } = req.body;
+
+  con.query(
+    "INSERT INTO reservations (name, phoneNumber, email, idtable, userid) VALUES (?, ?, ?, ?, ?)",
+    [name, phoneNumber, email, idtable, userid],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send({ message: "An error occurred." });
+      }
+
+      const updateTableQuery =
+        "UPDATE booktable SET isReserved = true WHERE id = ?";
+      con.query(updateTableQuery, [idtable], (err, updateResult) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).send({ message: "An error occurred." });
+        }
+
+        if (updateResult.affectedRows > 0) {
+          return res.send({ message: "Reservation created successfully." });
+        } else {
+          return res.send({ message: "Table not found." });
+        }
+      });
     }
   );
 });
@@ -364,7 +536,13 @@ app.get("/booktable", (req, res) => {
   const q = "SELECT * FROM booktable";
   con.query(q, (err, data) => {
     if (err) return res.json(err);
-    return res.json(data);
+
+    const tablesWithStatus = data.map((table) => ({
+      ...table,
+      isReserved: table.isReserved === 1, // Convert 0/1 to true/false
+    }));
+
+    return res.json(tablesWithStatus);
   });
 });
 

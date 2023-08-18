@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { images } from "../../constants";
 import { DateTime } from "luxon";
 import "./AddTable.css";
+import { MdArrowCircleLeft } from "react-icons/md";
 
 const AddTable = () => {
   const role = localStorage.getItem("role");
@@ -81,19 +82,29 @@ const AddTable = () => {
     <div className="app__bg">
       {auth && role === "admin" ? (
         <div className="app__bg">
-          <div className="navbar">
-            <div className="app__navbar-logo">
-              <img src={images.menumate} alt="app logo" />
-            </div>
+          <div className="navbar" id="navbar_booktable">
+        <div>
+          <Link to={"/"}>
+          <MdArrowCircleLeft
+            fontSize={40}
+            cursor=" pointer"
+            className="overlay__close"
+            id="arrow-left_booktable"
+            color="var(--color-golden)"
+          />
+        </Link>
+        </div>
+      
+      <div>
+        <div className="app__navbar-logo">
+          <img src={images.menumate} alt="app logo" />
+        </div>
 
-            <div className="app__navbar-spoon">
-              <img
-                src={images.spoon}
-                alt="about_spoon"
-                className="spoon__img"
-              />
-            </div>
-          </div>
+        <div className="app__navbar-spoon">
+          <img src={images.spoon} alt="about_spoon" className="spoon__img" />
+        </div>
+      </div>
+      </div>
 
           <div className="flex__center section__padding">
             <div className="table-container">

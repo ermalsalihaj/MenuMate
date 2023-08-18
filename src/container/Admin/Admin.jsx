@@ -1,7 +1,7 @@
 import "./Admin.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 const Admin = () => {
   const [users, setUsers] = useState([]);
@@ -187,6 +187,7 @@ const Admin = () => {
       try {
         const res = await axios.get("http://localhost:3001/reservations");
         setConfirmations(res.data);
+        console.log(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -493,7 +494,6 @@ const Admin = () => {
                 >
                   Add new Drink
                 </Link>
-                <h1>Drinks</h1>
                 <table>
                   <thead>
                     <tr>
@@ -625,6 +625,7 @@ const Admin = () => {
                       <th>Phone Number</th>
                       <th>Email</th>
                       <th>Table Number</th>
+                      <th>username</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -636,6 +637,8 @@ const Admin = () => {
                         <td>{confirmation.phonenumber}</td>
                         <td>{confirmation.email}</td>
                         <td>{confirmation.idtable}</td>
+                        {/* <td>{confirmation.userid}</td> */}
+                        <td>{confirmation.username}</td>
                         <td>
                           <button
                             onClick={() =>

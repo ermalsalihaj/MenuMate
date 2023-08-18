@@ -5,6 +5,7 @@ import { TableItem, SubHeading } from "../../components";
 import { data, images } from "../../constants";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { MdArrowCircleLeft } from "react-icons/md";
 
 const BookTable = () => {
   const navigate = useNavigate();
@@ -61,7 +62,8 @@ const BookTable = () => {
       (selectedTime !== "" && table.time !== selectedTime) ||
       (selectedLocation !== "" && table.location !== selectedLocation) ||
       (selectedTableSize !== "" &&
-        table.tablesize !== parseInt(selectedTableSize))
+        table.tablesize !== parseInt(selectedTableSize))||
+        table.isReserved
     ) {
       return false;
     }
@@ -70,7 +72,20 @@ const BookTable = () => {
 
   return (
     <div className="app__bg" style={{ height: "150vh" }}>
-      <div className="navbar">
+      <div className="navbar" id="navbar_booktable">
+        <div>
+          <Link to={"/"}>
+          <MdArrowCircleLeft
+            fontSize={40}
+            cursor=" pointer"
+            className="overlay__close"
+            id="arrow-left_booktable"
+            color="var(--color-golden)"
+          />
+        </Link>
+        </div>
+      
+      <div>
         <div className="app__navbar-logo">
           <img src={images.menumate} alt="app logo" />
         </div>
@@ -79,7 +94,7 @@ const BookTable = () => {
           <img src={images.spoon} alt="about_spoon" className="spoon__img" />
         </div>
       </div>
-
+      </div>
       <div>
         <input
           type="date"

@@ -3,11 +3,9 @@ import React, { useEffect, useState } from "react";
 import { MdArrowCircleLeft } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 
-const Add = () => {
+const AddPizza = () => {
   const role = localStorage.getItem("role");
   const [auth, setAuth] = useState(false);
-  const [ingredients, setIngredients] = useState([]);
-  const [selectedIngredients, setSelectedIngredients] = useState([]);
 
   useEffect(() => {
     const verify = async () => {
@@ -23,9 +21,9 @@ const Add = () => {
     verify();
   }, []);
 
-  const [meal, setMeal] = useState({
-    title: "",
-    description: "",
+  const [pizza, setpizza] = useState({
+    name: "",
+    ingredients: "",
     cover: "",
     price: "",
   });
@@ -33,55 +31,29 @@ const Add = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setMeal((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleIngredientChange = (event) => {
-    const selectedOptions = Array.from(
-      event.target.selectedOptions,
-      (option) => {
-        console.log(option.value);
-        return option.value;
-      }
-    );
-    setSelectedIngredients(selectedOptions);
+    setpizza((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleClick = async (e) => {
     e.preventDefault();
 
-    if (!meal.title.trim() || !meal.cover.trim() || !meal.price.trim()) {
+    if (
+      !pizza.name.trim() ||
+      !pizza.ingredients.trim() ||
+      !pizza.cover.trim() ||
+      !pizza.price.trim()
+    ) {
       setFormError(true);
       return;
     }
 
     try {
-      const newMeal = {
-        ...meal,
-        ingredients: selectedIngredients, // Include the selected ingredients
-      };
-
-      await axios.post("http://localhost:3001/menu", newMeal);
+      await axios.post("http://localhost:3001/pizza", pizza);
       navigate("/viewMenu");
     } catch (err) {
       console.log(err);
     }
   };
-  console.log(selectedIngredients);
-
-  useEffect(() => {
-    const fetchIngredients = async () => {
-      try {
-        const response = await axios.get("http://localhost:3001/ingredients");
-        setIngredients(response.data);
-        console.log(response.data);
-        // Set the fetched ingredients in state
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchIngredients();
-  }, []);
 
   return (
     <div>
@@ -105,15 +77,22 @@ const Add = () => {
           />
         </Link>
       </div>
+
       <div className="app__bg app__specialMenu flex__center section__padding">
         {auth && role === "admin" ? (
           <div className="form-add">
-            <h2 className="app__specialMenu-menu_heading">Add new meal</h2>
+            <h2 className="app__specialMenu-menu_heading">Add new pizza</h2>
             <input
               type="text"
-              placeholder="Title"
+              placeholder="name"
               onChange={handleChange}
-              name="title"
+              name="name"
+            />
+            <input
+              type="text"
+              placeholder="ingredients"
+              onChange={handleChange}
+              name="ingredients"
             />
             <input
               type="text"
@@ -127,20 +106,6 @@ const Add = () => {
               onChange={handleChange}
               name="cover"
             />
-            <label htmlFor="ingredients">Select Ingredients:</label>
-            <select
-              id="ingredients"
-              name="ingredients"
-              multiple
-              onChange={handleIngredientChange}
-              value={selectedIngredients}
-            >
-              {ingredients.map((ingredient) => (
-                <option key={ingredient.id} value={ingredient.id}>
-                  {ingredient.itemname}
-                </option>
-              ))}
-            </select>
 
             {formError && (
               <p className="error-message">Please fill in all fields.</p>
@@ -160,4 +125,4 @@ const Add = () => {
   );
 };
 
-export default Add;
+export default AddPizza;

@@ -5,10 +5,12 @@ import { MenuItem, SubHeading } from "../../components";
 import { data, images } from "../../constants";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { MdArrowCircleLeft } from "react-icons/md";
 
 const ViewMenu = () => {
   const [meals, setMeal] = useState([]);
   const [drinks, setDrink] = useState([]);
+  const [pizza, setPizza] = useState([]);
   const role = localStorage.getItem("role");
   const [auth, setAuth] = useState(false);
 
@@ -30,7 +32,9 @@ const ViewMenu = () => {
     const fetchAllMeals = async () => {
       try {
         const res = await axios.get("http://localhost:3001/menu");
+        // setMeal(res.data.map((meal) => ({ ...meal, ingredients: [] })));
         setMeal(res.data);
+        console.log(res.data.map((meal) => ({ ...meal, ingredients: [] })));
       } catch (err) {
         console.log(err);
       }
@@ -50,6 +54,18 @@ const ViewMenu = () => {
     fetchAllDrinks();
   }, []);
 
+  useEffect(() => {
+    const fetchAll = async () => {
+      try {
+        const res = await axios.get("http://localhost:3001/pizza");
+        setPizza(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchAll();
+  }, []);
+
   const handleDelete = async (id) => {
     try {
       await axios.delete("http://localhost:3001/menu/" + id);
@@ -67,10 +83,27 @@ const ViewMenu = () => {
       console.log(err);
     }
   };
+  const handleDeletePizza = async (idpizza) => {
+    try {
+      await axios.delete("http://localhost:3001/pizza/" + idpizza);
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="viewmenu">
       <div className="app__bg__wrapper__section__menu">
+        <Link to={"/"}>
+          <MdArrowCircleLeft
+            fontSize={40}
+            cursor=" pointer"
+            className="overlay__close"
+            id="arrow-left"
+            color="var(--color-golden)"
+          />
+        </Link>
         <div className="app__wrapper_info">
           <SubHeading title="Our Menu" />
           <h1 className="headtext__cormorant">Where every flavor </h1>
@@ -101,10 +134,13 @@ const ViewMenu = () => {
                       <MenuItem
                         title={meal.title}
                         price={meal.price}
-                        tags={meal.description}
+                        tags={meal.ingredients
+                          .map((ingredient) => ingredient.itemname)
+                          .join(", ")}
                       />
                     </div>
                   </div>
+
                   {auth && role === "admin" && (
                     <div className="btn">
                       <p
@@ -182,6 +218,65 @@ const ViewMenu = () => {
                   )}
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="app__specialMenu flex__center section__padding" id="menu">
+        <div className="app__specialMenu-title">
+          <h1 className="headtext__cormorant">Our Specialities</h1>
+        </div>
+
+        <div className="app__specialMenu-menu">
+          <div className="app__specialMenu-menu_wine flex__center">
+            {auth && role === "admin" && (
+              <Link to={"/addpizza"} className="app__specialMenu-menu_heading">
+                Add new Pizza
+              </Link>
+            )}
+
+            <div className="app__viewMenu_menu_items" id="pizza">
+              <img
+                src={images.pizza2}
+                className="pizza"
+                style={{ marginTop: 15 }}
+                alt=""
+              />
+              <div>
+                {pizza.map((pizza) => (
+                  <div className="viewmenu" id="pizza-page" key={pizza.idpizza}>
+                    <div className="meal-page">
+                      <img src={pizza.cover} alt="" className="img" />
+
+                      <div className="meal">
+                        <MenuItem
+                          title={pizza.name}
+                          price={pizza.price}
+                          tags={pizza.ingredients}
+                        />
+                      </div>
+                    </div>
+
+                    {auth && role === "admin" && (
+                      <div className="btn">
+                        <p
+                          className="delete"
+                          onClick={() => handleDeletePizza(pizza.idpizza)}
+                        >
+                          Delete
+                        </p>
+                        <Link
+                          className="update-btn"
+                          to={`/updatePizza/${pizza.idpizza}`}
+                        >
+                          <p className="update"> Update</p>
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

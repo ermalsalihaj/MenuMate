@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { MdArrowCircleLeft } from "react-icons/md";
+import { Link, useNavigate } from "react-router-dom";
 
 const AddDrink = () => {
   const role = localStorage.getItem("role");
@@ -55,48 +56,71 @@ const AddDrink = () => {
   };
 
   return (
-    <div className="app__bg app__specialMenu flex__center section__padding">
-      {auth && role === "admin" ? (
-        <div className="form-add">
-          <h2 className="app__specialMenu-menu_heading">Add new drink</h2>
-          <input
-            type="text"
-            placeholder="name"
-            onChange={handleChange}
-            name="name"
+    <div>
+      <div
+        id="add_padding"
+        style={{
+          marginBottom: "-45px",
+          paddingTop: "50px",
+          backgroundImage:
+            'url("http://localhost:3000/static/media/bg.3d421b1b5682e1b67deb.png")',
+          backgroundSize: "cover",
+        }}
+      >
+        <Link to={"/viewMenu"}>
+          <MdArrowCircleLeft
+            fontSize={40}
+            cursor=" pointer"
+            className="overlay__close"
+            id="arrow-left_booktable"
+            color="var(--color-golden)"
           />
-          <input
-            type="text"
-            placeholder="ingredients"
-            onChange={handleChange}
-            name="ingredients"
-          />
-          <input
-            type="text"
-            placeholder="Price"
-            onChange={handleChange}
-            name="price"
-          />
-          <input
-            type="text"
-            placeholder="Cover"
-            onChange={handleChange}
-            name="cover"
-          />
+        </Link>
+      </div>
 
-          {formError && (
-            <p className="error-message">Please fill in all fields.</p>
-          )}
+      <div className="app__bg app__specialMenu flex__center section__padding">
+        {auth && role === "admin" ? (
+          <div className="form-add">
+            <h2 className="app__specialMenu-menu_heading">Add new drink</h2>
+            <input
+              type="text"
+              placeholder="name"
+              onChange={handleChange}
+              name="name"
+            />
+            <input
+              type="text"
+              placeholder="ingredients"
+              onChange={handleChange}
+              name="ingredients"
+            />
+            <input
+              type="text"
+              placeholder="Price"
+              onChange={handleChange}
+              name="price"
+            />
+            <input
+              type="text"
+              placeholder="Cover"
+              onChange={handleChange}
+              name="cover"
+            />
 
-          <button className="formButton" onClick={handleClick}>
-            Add
-          </button>
-        </div>
-      ) : (
-        <div>
-          <h1>You Do Not Have Access To This Page</h1>
-        </div>
-      )}
+            {formError && (
+              <p className="error-message">Please fill in all fields.</p>
+            )}
+
+            <button className="formButton" onClick={handleClick}>
+              Add
+            </button>
+          </div>
+        ) : (
+          <div>
+            <h1>You Do Not Have Access To This Page</h1>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

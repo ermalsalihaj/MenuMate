@@ -60,6 +60,12 @@ import drink5 from "../assets/drink5.png";
 import drink6 from "../assets/drink6.png";
 import drink7 from "../assets/drink7.png";
 import alert from "../assets/alert.jpg";
+import pizza1 from "../assets/pizza1.png";
+import pizza2 from "../assets/pizza2.png";
+import pizza3 from "../assets/pizza3.jpg";
+import pizza4 from "../assets/pizza4.jpeg";
+import pizza5 from "../assets/pizza5.jpg";
+import pizza6 from "../assets/pizza6.jpg";
 
 export default {
   
@@ -124,5 +130,11 @@ export default {
   drink5,
   drink6,
   drink7,
-  alert
+  alert,
+  pizza1,
+  pizza2,
+  pizza3,
+  pizza4,
+  pizza5,
+  pizza6,
 };

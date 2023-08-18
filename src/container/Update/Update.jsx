@@ -6,6 +6,8 @@ import "./Update.css";
 const Update = () => {
   const role = localStorage.getItem("role");
   const [auth, setAuth] = useState(false);
+  const [ingredients, setIngredients] = useState([]);
+  const [selectedIngredients, setSelectedIngredients] = useState([]);
 
   useEffect(() => {
     const verify = async () => {
@@ -23,7 +25,6 @@ const Update = () => {
 
   const [menu, setmenu] = useState({
     title: "",
-    description: "",
     price: "",
     cover: "",
   });
@@ -57,18 +58,51 @@ const Update = () => {
     }
   }, [meal]);
 
+  useEffect(() => {
+    const fetchIngredients = async () => {
+      try {
+        const response = await axios.get("http://localhost:3001/ingredients");
+        setIngredients(response.data);
+        // Set the fetched ingredients in state
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchIngredients();
+  }, []);
+
   const handleChange = (e) => {
     setmenu((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleIngredientChange = (event) => {
+    const selectedOptions = Array.from(
+      event.target.selectedOptions,
+      (option) => option.value
+    );
+    setSelectedIngredients(selectedOptions);
+    console.log(selectedOptions);
   };
 
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      await axios.put("http://localhost:3001/viewMenu/" + menuId, menu);
+      const updatedMeal = {
+        ...menu,
+        ingredients: selectedIngredients,
+      };
+
+      await axios.put("http://localhost:3001/viewMenu/" + menuId, updatedMeal);
       navigate("/viewMenu");
     } catch (err) {
       console.log(err);
     }
+    // try {
+    //   await axios.put("http://localhost:3001/viewMenu/" + menuId, menu);
+    //   navigate("/viewMenu");
+    // } catch (err) {
+    //   console.log(err);
+    // }
   };
 
   return (
@@ -87,13 +121,6 @@ const Update = () => {
             />
             <input
               type="text"
-              placeholder="description"
-              onChange={handleChange}
-              name="description"
-              value={menu.description}
-            />
-            <input
-              type="text"
               placeholder="price"
               onChange={handleChange}
               name="price"
@@ -106,6 +133,21 @@ const Update = () => {
               name="cover"
               value={menu.cover}
             />
+
+            <label htmlFor="ingredients">Select Ingredients:</label>
+            <select
+              id="ingredients"
+              name="ingredients"
+              multiple
+              onChange={handleIngredientChange}
+              value={selectedIngredients}
+            >
+              {ingredients.map((ingredient) => (
+                <option key={ingredient.id} value={ingredient.id}>
+                  {ingredient.itemname}
+                </option>
+              ))}
+            </select>
 
             <button className="formButton" onClick={handleClick}>
               Add

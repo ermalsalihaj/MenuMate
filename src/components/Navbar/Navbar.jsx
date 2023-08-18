@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Link } from "react-router-dom";
-import { MdOutlineRestaurantMenu } from "react-icons/md";
+import { FaLongArrowAltLeft, MdArrowCircleLeft, MdOutlineRestaurantMenu } from "react-icons/md";
 import axios from "axios";
 
 import "./Navbar.css";

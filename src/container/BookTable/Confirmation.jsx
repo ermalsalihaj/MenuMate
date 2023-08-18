@@ -11,7 +11,10 @@ const Confirmation = () => {
   const [idtable, setIdtable] = useState();
   const [errors, setErrors] = useState({});
 
+  const navigate = useNavigate();
   const [table, setTable] = useState(null);
+  const [tables, setTables] = useState([]);
+  const [filteredTables, setfilteredTables] = useState([]);
 
   const { id } = useParams();
 
@@ -28,6 +31,24 @@ const Confirmation = () => {
       }
     };
 
+    fetch();
+  }, [id]);
+
+  const [userid, setuserid] = useState();
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await axios.get("http://localhost:3001/users");
+        setUser(response.data[id - 1]);
+
+        setuserid(response.data.find((user) => user.id === Number(id)));
+        console.log(response.data.find((user) => user.id === Number(id)));
+      } catch (error) {
+        console.error(error);
+      }
+    };
     fetch();
   }, [id]);
 
@@ -77,9 +98,23 @@ const Confirmation = () => {
           phoneNumber,
           email,
           idtable: idtable.id,
+          userid: userid.id,
         });
 
         console.log("Reservation created successfully.");
+        const updatedTables = tables.map((table) =>
+          table.id === idtable.id ? { ...table, isReserved: true } : table
+        );
+
+        // Update the filteredTables state to reflect the changes
+        const updatedFilteredTables = filteredTables.map((table) =>
+          table.id === idtable.id ? { ...table, isReserved: true } : table
+        );
+        setfilteredTables(updatedFilteredTables);
+
+        console.log(updatedTables);
+        setTable(updatedTables);
+        navigate("/");
       } catch (error) {
         console.error("An error occurred:", error);
       }
@@ -136,7 +171,6 @@ const Confirmation = () => {
               placeholder="Email"
               value={email}
               onChange={handleEmailChange}
-             
             />
             <br />
             {errors.email && (

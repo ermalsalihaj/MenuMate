@@ -35,3 +35,17 @@ input[type="text"] {
   border: none;
   cursor: pointer;
 }
+label {
+  font-family: var(--font-base);
+  font-size: 20px;
+  color: var(--color-golden);
+}
+#ingredients {
+  width: 100%;
+  height: 15vh;
+  font-size: 15px;
+}
+#ingredients option {
+  font-family: var(--font-alt);
+  padding: 5px;
+}

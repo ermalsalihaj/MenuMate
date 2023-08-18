@@ -160,3 +160,20 @@
   background: url(http://localhost:3000/static/media/drink3.16f4594a92c636fbcf0c.png);
   background-repeat: repeat;
 }
+
+#arrow-left {
+  display: flex;
+  position: fixed;
+  margin-left: -40px;
+  margin-top: -40px;
+}
+#pizza {
+  column-gap: 150px;
+}
+.pizza {
+  width: 135%;
+  margin-left: -150px;
+}
+#pizza-page {
+  margin-bottom: 25px;
+}

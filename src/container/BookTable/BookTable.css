@@ -52,3 +52,9 @@ p {
 .button-light-yellow p {
   color: black;
 }
+#navbar_booktable{
+  display: flex;
+}
+#arrow-left_booktable{
+  margin-left: 40px;
+}
