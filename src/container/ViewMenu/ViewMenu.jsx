@@ -225,7 +225,7 @@ const ViewMenu = () => {
 
       <div className="app__specialMenu flex__center section__padding" id="menu">
         <div className="app__specialMenu-title">
-          <h1 className="headtext__cormorant">Our Specialities</h1>
+          <h1 className="headtext__cormorant">Pizzas</h1>
         </div>
 
         <div className="app__specialMenu-menu">

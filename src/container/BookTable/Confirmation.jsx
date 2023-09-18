@@ -15,6 +15,8 @@ const Confirmation = () => {
   const [table, setTable] = useState(null);
   const [tables, setTables] = useState([]);
   const [filteredTables, setfilteredTables] = useState([]);
+  const userId = localStorage.getItem("id");
+  // console.log(uid);
 
   const { id } = useParams();
 
@@ -35,22 +37,23 @@ const Confirmation = () => {
   }, [id]);
 
   const [userid, setuserid] = useState();
-  const [user, setUser] = useState();
+
 
   useEffect(() => {
     const fetch = async () => {
       try {
         const response = await axios.get("http://localhost:3001/users");
-        setUser(response.data[id - 1]);
-
-        setuserid(response.data.find((user) => user.id === Number(id)));
-        console.log(response.data.find((user) => user.id === Number(id)));
+        
+        const user = response.data.find((user) => user.id === Number(userId));
+        
+        setuserid(user);
+        console.log(user.id);
       } catch (error) {
         console.error(error);
       }
     };
     fetch();
-  }, [id]);
+  }, [userId]);
 
   const handleNameChange = (event) => {
     setName(event.target.value);

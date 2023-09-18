@@ -623,7 +623,7 @@ app.post("/login", (req, res) => {
           }
 
           if (result[0].role === "user") {
-            console.log("User logged in:", result[0].username);
+            console.log("User logged in:",  result[0].username);
           }
 
           res

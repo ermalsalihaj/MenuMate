@@ -51,6 +51,7 @@ function Login() {
       } else {
         setLoginStatus("Login was successful");
         localStorage.setItem("role", response.data.role);
+        localStorage.setItem("id", response.data.id);
 
         if (response.data.role === "staff") {
           navigate("/inventory");
