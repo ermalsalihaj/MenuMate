@@ -623,7 +623,7 @@ app.post("/login", (req, res) => {
           }
 
           if (result[0].role === "user") {
-            console.log("User logged in:",  result[0].username);
+            console.log("User logged in:", result[0].username);
           }
 
           res
@@ -673,4 +673,41 @@ app.get("/", verifyUser, (req, res) => {
 });
 app.listen(3001, () => {
   console.log("Running on port 3001...");
+});
+
+//////////////////////////// BOOKTABLE TIME /////////////////////////////////////
+app.get("/booktable/time", (req, res) => {
+  con.query("SELECT * FROM booktime", (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send({ message: "An error occurred." });
+    } else {
+      const timeOptions = result.map((row) => row.time);
+      res.json(timeOptions);
+    }
+  });
+});
+/////////////////////////// BOOKTABLE LOCATION /////////////////////////////////
+app.get("/booktable/location", (req, res) => {
+  con.query("SELECT * FROM booklocation", (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send({ message: "An error occurred." });
+    } else {
+      const locationOptions = result.map((row) => row.location);
+      res.json(locationOptions);
+    }
+  });
+});
+////////////////////////////// BOOKTABLE TABLESIZE //////////////////////////
+app.get("/booktable/size", (req, res) => {
+  con.query("SELECT * FROM booksize", (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send({ message: "An error occurred." });
+    } else {
+      const sizeOptions = result.map((row) => row.size);
+      res.json(sizeOptions);
+    }
+  });
 });

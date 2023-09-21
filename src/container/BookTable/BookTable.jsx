@@ -16,7 +16,53 @@ const BookTable = () => {
   const [selectedTableSize, setSelectedTableSize] = useState("");
   const [isFormValid, setIsFormValid] = useState(true);
 
+  const [timeOptions, setTimeOptions] = useState([]);
+  const [locationOptions, setLocationOptions] = useState([]);
+  const [sizeOptions, setSizeOptions] = useState([]);
+
   useEffect(() => {
+    // Fetch size options from the server when the component mounts
+    const fetchSizeOptions = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3001/booktable/size"
+        );
+        setSizeOptions(response.data);
+      } catch (error) {
+        console.error("Error fetching size options:", error);
+      }
+    };
+
+    fetchSizeOptions();
+
+    // Fetch time options from the server when the component mounts
+    const fetchTimeOptions = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3001/booktable/time"
+        );
+        setTimeOptions(response.data);
+      } catch (error) {
+        console.error("Error fetching time options:", error);
+      }
+    };
+
+    fetchTimeOptions();
+
+    // Fetch location options from the server when the component mounts
+    const fetchLocationOptions = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3001/booktable/location"
+        );
+        setLocationOptions(response.data);
+      } catch (error) {
+        console.error("Error fetching location options:", error);
+      }
+    };
+
+    fetchLocationOptions();
+
     const fetchAllTables = async () => {
       try {
         const res = await axios.get("http://localhost:3001/booktable");
@@ -62,8 +108,8 @@ const BookTable = () => {
       (selectedTime !== "" && table.time !== selectedTime) ||
       (selectedLocation !== "" && table.location !== selectedLocation) ||
       (selectedTableSize !== "" &&
-        table.tablesize !== parseInt(selectedTableSize))||
-        table.isReserved
+        table.tablesize !== parseInt(selectedTableSize)) ||
+      table.isReserved
     ) {
       return false;
     }
@@ -75,25 +121,25 @@ const BookTable = () => {
       <div className="navbar" id="navbar_booktable">
         <div>
           <Link to={"/"}>
-          <MdArrowCircleLeft
-            fontSize={40}
-            cursor=" pointer"
-            className="overlay__close"
-            id="arrow-left_booktable"
-            color="var(--color-golden)"
-          />
-        </Link>
-        </div>
-      
-      <div>
-        <div className="app__navbar-logo">
-          <img src={images.menumate} alt="app logo" />
+            <MdArrowCircleLeft
+              fontSize={40}
+              cursor=" pointer"
+              className="overlay__close"
+              id="arrow-left_booktable"
+              color="var(--color-golden)"
+            />
+          </Link>
         </div>
 
-        <div className="app__navbar-spoon">
-          <img src={images.spoon} alt="about_spoon" className="spoon__img" />
+        <div>
+          <div className="app__navbar-logo">
+            <img src={images.menumate} alt="app logo" />
+          </div>
+
+          <div className="app__navbar-spoon">
+            <img src={images.spoon} alt="about_spoon" className="spoon__img" />
+          </div>
         </div>
-      </div>
       </div>
       <div>
         <input
@@ -109,15 +155,11 @@ const BookTable = () => {
           onChange={(e) => setSelectedTime(e.target.value)}
         >
           <option value="">Choose a Time</option>
-          <option value="9AM">9AM</option>
-          <option value="10AM">10AM</option>
-          <option value="11AM">11AM</option>
-          <option value="12PM">12PM</option>
-          <option value="1PM">1PM</option>
-          <option value="2PM">2PM</option>
-          <option value="3PM">3PM</option>
-          <option value="4PM">4PM</option>
-          <option value="5PM">5PM</option>
+          {timeOptions.map((timeOption) => (
+            <option key={timeOption} value={timeOption}>
+              {timeOption}
+            </option>
+          ))}
         </select>
 
         <select
@@ -126,9 +168,11 @@ const BookTable = () => {
           onChange={(e) => setSelectedLocation(e.target.value)}
         >
           <option value="">Choose a Location</option>
-          <option value="any location">Any Location</option>
-          <option value="inside">Inside</option>
-          <option value="outside">Outside</option>
+          {locationOptions.map((locationOption) => (
+            <option key={locationOption} value={locationOption}>
+              {locationOption}
+            </option>
+          ))}
         </select>
 
         <select
@@ -137,13 +181,11 @@ const BookTable = () => {
           onChange={(e) => setSelectedTableSize(e.target.value)}
         >
           <option value="">Choose a Table Size</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
+          {sizeOptions.map((sizeOption) => (
+            <option key={sizeOption} value={sizeOption}>
+              {sizeOption}
+            </option>
+          ))}
         </select>
       </div>
 
