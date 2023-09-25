@@ -21,7 +21,6 @@ const BookTable = () => {
   const [sizeOptions, setSizeOptions] = useState([]);
 
   useEffect(() => {
-    // Fetch size options from the server when the component mounts
     const fetchSizeOptions = async () => {
       try {
         const response = await axios.get(
@@ -34,8 +33,6 @@ const BookTable = () => {
     };
 
     fetchSizeOptions();
-
-    // Fetch time options from the server when the component mounts
     const fetchTimeOptions = async () => {
       try {
         const response = await axios.get(
@@ -49,7 +46,7 @@ const BookTable = () => {
 
     fetchTimeOptions();
 
-    // Fetch location options from the server when the component mounts
+    
     const fetchLocationOptions = async () => {
       try {
         const response = await axios.get(
@@ -66,6 +63,7 @@ const BookTable = () => {
     const fetchAllTables = async () => {
       try {
         const res = await axios.get("http://localhost:3001/booktable");
+        console.log("Table data from API:", res.data); 
         setTable(res.data);
       } catch (err) {
         console.log(err);
@@ -102,17 +100,27 @@ const BookTable = () => {
     }
   };
 
-  const filteredTables = tables.filter((table) => {
+  const filteredTables = tables
+  .filter((table) => !table.isReserved) 
+  .filter((table) => {
+    console.log("Table data:", table);
+    console.log("selectedDate:", selectedDate);
+    console.log("selectedTime:", selectedTime);
+    console.log("selectedLocation:", selectedLocation);
+    console.log("selectedTableSize:", selectedTableSize);
+
     if (
       (selectedDate !== "" && !table.date.includes(selectedDate)) ||
       (selectedTime !== "" && table.time !== selectedTime) ||
       (selectedLocation !== "" && table.location !== selectedLocation) ||
       (selectedTableSize !== "" &&
-        table.tablesize !== parseInt(selectedTableSize)) ||
-      table.isReserved
+        table.tablesize !== parseInt(selectedTableSize))
     ) {
+      console.log("Excluded due to other conditions");
       return false;
     }
+
+    console.log("Included");
     return true;
   });
 

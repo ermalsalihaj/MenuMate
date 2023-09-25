@@ -3,6 +3,8 @@ import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import "./Confirmation.css";
 import { images } from "../../constants";
+import { MdArrowCircleLeft } from "react-icons/md";
+
 
 const Confirmation = () => {
   const [name, setName] = useState("");
@@ -15,8 +17,6 @@ const Confirmation = () => {
   const [table, setTable] = useState(null);
   const [tables, setTables] = useState([]);
   const [filteredTables, setfilteredTables] = useState([]);
-  const userId = localStorage.getItem("id");
-  // console.log(uid);
 
   const { id } = useParams();
 
@@ -37,23 +37,22 @@ const Confirmation = () => {
   }, [id]);
 
   const [userid, setuserid] = useState();
-
+  const [user, setUser] = useState();
 
   useEffect(() => {
     const fetch = async () => {
       try {
         const response = await axios.get("http://localhost:3001/users");
-        
-        const user = response.data.find((user) => user.id === Number(userId));
-        
-        setuserid(user);
-        console.log(user.id);
+        setUser(response.data[id - 1]);
+
+        setuserid(response.data.find((user) => user.id === Number(id)));
+        console.log(response.data.find((user) => user.id === Number(id)));
       } catch (error) {
         console.error(error);
       }
     };
     fetch();
-  }, [userId]);
+  }, [id]);
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -128,6 +127,18 @@ const Confirmation = () => {
     <div>
       <div className="app__bg">
         <div className="navbar">
+        <div>
+          <Link to={"/"}>
+          <MdArrowCircleLeft
+            fontSize={40}
+            cursor=" pointer"
+            className="overlay__close"
+            id="arrow-left_booktable"
+            color="var(--color-golden)"
+          />
+        </Link>
+        </div>
+
           <div className="app__navbar-logo">
             <img src={images.menumate} alt="app logo" />
           </div>

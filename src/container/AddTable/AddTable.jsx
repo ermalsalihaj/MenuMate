@@ -132,9 +132,9 @@ const AddTable = () => {
                 name="location"
               >
                 <option value="">Choose a Location</option>
-                <option value="any location">Any Location</option>
-                <option value="inside">Inside</option>
-                <option value="outside">Outside</option>
+                <option value="Any Location">Any Location</option>
+                <option value="Inside">Inside</option>
+                <option value="Outside">Outside</option>
               </select>
               <input
                 type="number"

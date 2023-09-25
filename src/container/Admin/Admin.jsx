@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { MdArrowCircleLeft } from "react-icons/md";
+
 const Admin = () => {
   const [users, setUsers] = useState([]);
   const [editedUser, setEditedUser] = useState({});
@@ -17,10 +19,15 @@ const Admin = () => {
   const [drinks, setDrinks] = useState([]);
   const [editedDrink, setEditedDrink] = useState({});
   const [deletedDrinkId, setDeletedDrinkId] = useState(null);
-
+  const [pizzas, setPizzas] = useState([]);
+  const [editedPizza, setEditedPizza] = useState({});
+  const [booktime, setBooktime] = useState([]);
+  const [newTime, setNewTime] = useState("");
+  const [editedBooktime, setEditedBooktime] = useState({});
+  const [deletedBooktimeId, setDeletedBooktimeId] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
   const role = localStorage.getItem("role");
   const [auth, setAuth] = useState(false);
-
   ///////////////////////AUTH//////////////////////////////
   useEffect(() => {
     const verify = async () => {
@@ -153,6 +160,55 @@ const Admin = () => {
       console.log(err);
     }
   };
+  useEffect(() => {
+    axios.get("http://localhost:3001/pizza").then((response) => {
+      setPizzas(response.data);
+    });
+  }, []);
+  const handleEditPizza = (pizza) => {
+    setEditedPizza(pizza);
+  };
+  const handlePizzaChange = (e) => {
+    const { name, value } = e.target;
+    setEditedPizza((prevPizza) => ({
+      ...prevPizza,
+      [name]: value,
+    }));
+  };
+
+  const handleSavePizza = () => {
+    axios
+      .put(`http://localhost:3001/pizza/${editedPizza.idpizza}`, editedPizza)
+      .then((response) => {
+        console.log(response.data);
+
+        setPizzas((prevPizzas) =>
+          prevPizzas.map((p) =>
+            p.idpizza === editedPizza.idpizza ? editedPizza : p
+          )
+        );
+
+        setEditedPizza({});
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleDeletePizza = (idpizza) => {
+    axios
+      .delete(`http://localhost:3001/pizza/${idpizza}`)
+      .then((response) => {
+        console.log(response.data);
+
+        setPizzas((prevPizzas) =>
+          prevPizzas.filter((p) => p.idpizza !== idpizza)
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   /////////////////////BookTable////////////////////////////////////////////////
   useEffect(() => {
@@ -180,6 +236,75 @@ const Admin = () => {
     setActiveTab(tab);
   };
 
+  useEffect(() => {
+    // Fetch booktimes from the API
+    axios
+      .get("http://localhost:3001/booktime")
+      .then((response) => {
+        setBooktime(response.data.booktime);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const handleAddBooktime = () => {
+    axios
+      .post("http://localhost:3001/booktime", { time: newTime })
+      .then((response) => {
+        setBooktime([...booktime, response.data]);
+        setNewTime("");
+        setShowAddModal(false);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleEditBooktime = (booktime) => {
+    setEditedBooktime(booktime);
+  };
+
+  const handleSaveBooktime = () => {
+    axios
+      .put(
+        `http://localhost:3001/booktime/${editedBooktime.idbooktime}`,
+        editedBooktime
+      )
+      .then(() => {
+        setBooktime(
+          booktime.map((booktime) =>
+            booktime.idbooktime === editedBooktime.idbooktime
+              ? editedBooktime
+              : booktime
+          )
+        );
+        setEditedBooktime({});
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleDeleteBooktime = (id) => {
+    setDeletedBooktimeId(id);
+  };
+
+  const handleConfirmDeleteTime = () => {
+    axios
+      .delete(`http://localhost:3001/booktime/${deletedBooktimeId}`)
+      .then(() => {
+        setBooktime(
+          booktime.filter(
+            (booktime) => booktime.idbooktime !== deletedBooktimeId
+          )
+        );
+        setDeletedBooktimeId(null);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
   ////////////////////////Reservations//////////////////////////////////
 
   useEffect(() => {
@@ -257,6 +382,27 @@ const Admin = () => {
           <div className="app__bg">
             {auth && role === "admin" ? (
               <div className="content">
+                <Link to={"/"}>
+                  <MdArrowCircleLeft
+                    fontSize={40}
+                    cursor="pointer"
+                    className="overlay__close"
+                    id="arrow-left_booktable"
+                    color="var(--color-golden)"
+                  />
+                  <span
+                    style={{
+                      marginLeft: "10px",
+                      color: "var(--color-golden)",
+                      verticalAlign: "top",
+                      textDecoration: "underline",
+                      fontSize: "20px",
+                    }}
+                  >
+                    Back to main page
+                  </span>
+                </Link>
+
                 <div className="home-page">
                   <div className="home-box">
                     <h2>Users</h2>
@@ -269,6 +415,10 @@ const Admin = () => {
                   <div className="home-box">
                     <h2>Drinks</h2>
                     <p>{drinks ? drinks.length : 0}</p>
+                  </div>
+                  <div className="home-box">
+                    <h2>Pizzas</h2>
+                    <p>{pizzas ? pizzas.length : 0}</p>
                   </div>
                   <div className="home-box">
                     <h2>Tables</h2>
@@ -292,16 +442,6 @@ const Admin = () => {
                       </div>
                     ))}
                   </ul>
-                  {/* <ul>
-                  {recentActivity.map((activity, index) => (
-                    <div key={index}>
-                      <span>{activity}</span>
-                      <button onClick={() => deleteActivity(index)}>
-                        DeleteActivity
-                      </button>
-                    </div>
-                  ))}
-                </ul> */}
                 </div>
               </div>
             ) : (
@@ -546,6 +686,200 @@ const Admin = () => {
             )}
           </div>
         );
+      case "booktime":
+        return (
+          <div className="app__bg">
+            {auth && role === "admin" ? (
+              <div className="app__bg">
+                <div
+                  className="app__specialMenu-menu_heading"
+                  style={{ display: "flex", justifyContent: "center" }}
+                >
+                  <button onClick={() => setShowAddModal(true)}>
+                    Add Time
+                  </button>
+                </div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Time</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {booktime.map((booktime) => (
+                      <tr key={booktime.idbooktime}>
+                        <td>{booktime.idbooktime}</td>
+                        <td>
+                          {editedBooktime.idbooktime === booktime.idbooktime ? (
+                            <input
+                              type="text"
+                              value={editedBooktime.time}
+                              onChange={(e) =>
+                                setEditedBooktime({
+                                  ...editedBooktime,
+                                  time: e.target.value,
+                                })
+                              }
+                            />
+                          ) : (
+                            booktime.time
+                          )}
+                        </td>
+                        <td>
+                          {editedBooktime.idbooktime === booktime.idbooktime ? (
+                            <>
+                              <button onClick={handleSaveBooktime}>Save</button>
+                              <button
+                                onClick={() => setEditedBooktime({})}
+                                style={{ background: "red" }}
+                              >
+                                Cancel
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <div className="btn">
+                                <p
+                                  className="update"
+                                  style={{
+                                    marginRight: "5px",
+                                    marginTop: "-11px",
+                                  }}
+                                  onClick={() => handleEditBooktime(booktime)}
+                                >
+                                  Edit
+                                </p>
+                                <p
+                                  className="delete"
+                                  onClick={() =>
+                                    handleDeleteBooktime(booktime.idbooktime)
+                                  }
+                                >
+                                  Delete
+                                </p>
+                              </div>
+                            </>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {deletedBooktimeId && (
+                  <div className="delete-confirmation">
+                    <p>Are you sure you want to delete this booktime entry?</p>
+                    <div className="buttons">
+                      <button onClick={handleConfirmDeleteTime}>Yes</button>
+                      <button onClick={() => setDeletedBooktimeId(null)}>
+                        No
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {showAddModal && (
+                  <div className="modal">
+                    <div className="modal-content">
+                      <h2>Add New Time</h2>
+                      <input
+                        type="text"
+                        placeholder="Enter a new time"
+                        style={{ width: "200px", marginLeft:"350px" }} 
+                        value={newTime}
+                        onChange={(e) => setNewTime(e.target.value)}
+                      />
+                      <div className="modal-buttons" style={{display:"flex",justifyContent:"center"}}>
+                        <button onClick={handleAddBooktime}>Add</button>
+                        <button onClick={() => setShowAddModal(false)}>
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                <h1>You Do Not Have Access To This Page</h1>
+              </div>
+            )}
+          </div>
+        );
+      case "pizza":
+        return (
+          <div className="app__bg">
+            {auth && role === "admin" ? (
+              <div className="app__bg">
+                <Link
+                  to={"/addPizza"}
+                  className="app__specialMenu-menu_heading"
+                  style={{ display: "flex", justifyContent: "center" }}
+                >
+                  Add new pizza
+                </Link>
+                <div className="pizza-list">
+                  <h2>Pizza List</h2>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Cover</th>
+                        <th>Name</th>
+                        <th>Ingredients</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {pizzas.map((pizza) => (
+                        <tr key={pizza.idpizza}>
+                          <td>{pizza.idpizza}</td>
+                          <td>
+                            <img src={pizza.cover} alt="" className="img" />
+                          </td>
+                          <td>{pizza.name}</td>
+                          <td>{pizza.ingredients}</td>
+                          <td>{pizza.price}</td>
+
+                          <td>
+                            <Link
+                              className="update-btn"
+                              to={`/updatePizza/${pizza.idpizza}`}
+                            >
+                              <p
+                                className="update"
+                                style={{ marginBottom: "15px" }}
+                                onClick={() => handleEditPizza(pizza)}
+                              >
+                                Edit
+                              </p>
+                            </Link>
+
+                            <div className="btn">
+                              <p
+                                className="delete"
+                                onClick={() => handleDeletePizza(pizza.idpizza)}
+                              >
+                                Delete
+                              </p>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <h1>You Do Not Have Access To This Page</h1>
+              </div>
+            )}
+          </div>
+        );
+
       case "tables":
         return (
           <div className="app__bg">
@@ -625,7 +959,7 @@ const Admin = () => {
                       <th>Phone Number</th>
                       <th>Email</th>
                       <th>Table Number</th>
-                      <th>username</th>
+                      <th>Username</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -637,7 +971,7 @@ const Admin = () => {
                         <td>{confirmation.phonenumber}</td>
                         <td>{confirmation.email}</td>
                         <td>{confirmation.idtable}</td>
-                        {/* <td>{confirmation.userid}</td> */}
+
                         <td>{confirmation.username}</td>
                         <td>
                           <button
@@ -706,6 +1040,12 @@ const Admin = () => {
                 Meals
               </li>
               <li
+                className={activeTab === "pizza" ? "active" : ""}
+                onClick={() => handleTabChange("pizza")}
+              >
+                Pizza
+              </li>
+              <li
                 className={activeTab === "drink" ? "active" : ""}
                 onClick={() => handleTabChange("drinks")}
               >
@@ -716,6 +1056,12 @@ const Admin = () => {
                 onClick={() => handleTabChange("tables")}
               >
                 Tables
+              </li>
+              <li
+                className={activeTab === "booktime" ? "active" : ""}
+                onClick={() => handleTabChange("booktime")}
+              >
+                Table Time
               </li>
               <li
                 className={activeTab === "confirmations" ? "active" : ""}

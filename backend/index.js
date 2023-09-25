@@ -539,16 +539,15 @@ app.get("/booktable", (req, res) => {
 
     const tablesWithStatus = data.map((table) => ({
       ...table,
-      isReserved: table.isReserved === 1, // Convert 0/1 to true/false
+      isReserved: table.isReserved === 1 ? true : false, // Convert to boolean
     }));
 
     return res.json(tablesWithStatus);
   });
 });
-
 app.post("/booktable", (req, res) => {
   const q =
-    "Insert into booktable (`date`,`time`,`location`,`tablesize`) VALUES(?)";
+    "INSERT INTO booktable (`date`, `time`, `location`, `tablesize`, `isReserved`) VALUES (?, ?, ?, ?, ?)";
   const VALUES = [
     DateTime.fromISO(req.body.date, { zone: "Europe/Belgrade" })
       .plus({ days: 1 })
@@ -556,9 +555,10 @@ app.post("/booktable", (req, res) => {
     req.body.time,
     req.body.location,
     req.body.tablesize,
+    0, // Default value for isReserved
   ];
 
-  con.query(q, [VALUES], (err, data) => {
+  con.query(q, VALUES, (err, data) => {
     if (err) return res.json(err);
     return res.json("Table created successfully.");
   });
@@ -593,6 +593,60 @@ app.put("/booktable/:id", (req, res) => {
   con.query(q, values, (err, data) => {
     if (err) return res.json(err);
     return res.json("Table updated successfully.");
+  });
+});
+////////////////////////BookTime///////////////////////////////////////
+app.post('/booktime', (req, res) => {
+  const { time } = req.body;
+  if (!time) {
+    return res.status(400).json({ error: 'Time is required' });
+  }
+
+  const sql = 'INSERT INTO booktime (time) VALUES (?)';
+  con.query(sql, [time], (err, results) => {
+    if (err) {
+      console.error('Error inserting data into MySQL:', err);
+      return res.status(500).json({ error: err.message });
+    }
+
+    res.json({ id: results.insertId, time });
+  });
+});
+
+// Get all booktime entries
+app.get('/booktime', (req, res) => {
+  con.query('SELECT * FROM booktime', (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ booktime: rows });
+  });
+});
+
+app.put('/booktime/:id', (req, res) => {
+  const { id } = req.params;
+  const { time } = req.body;
+
+  if (!time) {
+    return res.status(400).json({ error: 'Time is required' });
+  }
+
+  con.query('UPDATE booktime SET time = ? WHERE idbooktime = ?', [time, id], (err) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ message: 'Booktime updated successfully' });
+  });
+});
+
+app.delete('/booktime/:id', (req, res) => {
+  const { id } = req.params;
+
+  con.query('DELETE FROM booktime WHERE idbooktime = ?', [id], (err) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ message: 'Booktime deleted successfully' });
   });
 });
 
